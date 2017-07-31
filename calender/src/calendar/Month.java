@@ -32,7 +32,7 @@ public class Month {
         listeners.add(c);
     }
     
-    // Chnages current date and notifies listeners
+    // Changes current date and notifies listeners
     public void changeDate(LocalDate date){
         this.date = date;
         for (ChangeListener l : listeners) {
