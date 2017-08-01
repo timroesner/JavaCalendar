@@ -150,7 +150,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		navPanel.add(agendaPanelBtn);
 		navPanel.add(quit);
 		rightView.add(navPanel);
-		rightView.add(dayView);
+		rightView.add(weekViewPanel);
 		add(monthView);
 		add(rightView);
 	}
