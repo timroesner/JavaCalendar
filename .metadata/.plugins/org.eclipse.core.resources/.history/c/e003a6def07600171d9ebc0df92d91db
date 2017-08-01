@@ -16,7 +16,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<JTextField> labels = new ArrayList<>();
 	private ArrayList<LocalDate> dates = new ArrayList<>();
 	private Event generalEvent = new Event();
-	private DayViewPanel dayView = new DayViewPanel();
+	// private DayViewPanel dayView = new DayViewPanel();
 	private WeekViewPanel weekViewPanel = new WeekViewPanel();
 	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
 	

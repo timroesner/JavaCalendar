@@ -12,7 +12,7 @@ import java.util.TreeSet;
 import java.util.List;
 
 /*
- * 1) changing days doesn't update month or even day
+ * 1) changing days doesn't update month
  * 2) creating new events in the month view does not update the panel
  * 3) remove space between weekdays and panes
  */

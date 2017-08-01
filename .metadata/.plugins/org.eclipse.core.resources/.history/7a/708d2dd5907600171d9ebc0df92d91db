@@ -50,7 +50,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		//create grid of month days
 		createGridPanel(selectedDate);
 		this.add(gridPanel);
-		this.setPreferredSize(new Dimension(300,200));
+		//this.setPreferredSize(new Dimension(300,200));
 		
 		JScrollPane scrollPane = new JScrollPane(gridPanel);
 		scrollPane.setPreferredSize(new Dimension(800,200));
