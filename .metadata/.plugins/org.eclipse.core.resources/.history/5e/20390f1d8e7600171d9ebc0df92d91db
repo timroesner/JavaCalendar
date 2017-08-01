@@ -14,7 +14,7 @@ import java.util.List;
 /*
  * 1) changing days doesn't update month
  * 2) creating new events in the month view does not update the panel
- * 3) remove space between weekdays and panes
+ * 3) add a ScrollBar
  */
 public class MonthView extends JPanel implements ChangeListener {
 
@@ -30,7 +30,9 @@ public class MonthView extends JPanel implements ChangeListener {
 		selectedDate = SimpleCalendar.month.getSelectedDate();
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
 		gridPanel = new JPanel();
-		
+		JScrollPane scrollPane = new JScrollPane(gridPanel);
+		scrollPane.setPreferredSize(new Dimension(800,500));
+		add(scrollPane);
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		for (int i = 0; i < textPanes.length; i++)
@@ -50,12 +52,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		//create grid of month days
 		createGridPanel(selectedDate);
 		this.add(gridPanel);
-		this.setPreferredSize(new Dimension(300,200));
-		
-		JScrollPane scrollPane = new JScrollPane(gridPanel);
-		scrollPane.setPreferredSize(new Dimension(800,200));
-		add(scrollPane);
-
+		this.setPreferredSize(new Dimension(700,300));
 	}
 
 	public void createGridPanel(LocalDate date)
@@ -101,7 +98,6 @@ public class MonthView extends JPanel implements ChangeListener {
 			pane.insertComponent(pane.getDayValue());
 			gridPanel.add(pane);
 		}
-
 	}
 
 	private void displayEvents(LocalDate date)

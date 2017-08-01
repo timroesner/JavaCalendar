@@ -13,8 +13,8 @@ import java.util.List;
 
 /*
  * 1) changing days doesn't update month
- * 2) creating new events in the month view does not update the panel
- * 3) remove space between weekdays and panes
+ * 2) problem with displaying events
+ * 3) creating new events does not update the panel
  */
 public class MonthView extends JPanel implements ChangeListener {
 
@@ -30,7 +30,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		selectedDate = SimpleCalendar.month.getSelectedDate();
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
 		gridPanel = new JPanel();
-		
+
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		for (int i = 0; i < textPanes.length; i++)
@@ -50,12 +50,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		//create grid of month days
 		createGridPanel(selectedDate);
 		this.add(gridPanel);
-		this.setPreferredSize(new Dimension(300,200));
-		
-		JScrollPane scrollPane = new JScrollPane(gridPanel);
-		scrollPane.setPreferredSize(new Dimension(800,200));
-		add(scrollPane);
-
+		this.setPreferredSize(new Dimension(700,300));
 	}
 
 	public void createGridPanel(LocalDate date)
@@ -101,7 +96,6 @@ public class MonthView extends JPanel implements ChangeListener {
 			pane.insertComponent(pane.getDayValue());
 			gridPanel.add(pane);
 		}
-
 	}
 
 	private void displayEvents(LocalDate date)
@@ -200,10 +194,10 @@ public class MonthView extends JPanel implements ChangeListener {
 		//m.attach(mv);
 		//mv.drawView();
 		
-		LocalDate d1 = LocalDate.of(2017, 8, 26);
-		LocalDate d2 = LocalDate.of(2017, 8, 29);
-		LocalDate d3 = LocalDate.of(2017, 8, 30);
-		LocalDate d4 = LocalDate.of(2017, 8, 2);
+		LocalDate d1 = LocalDate.of(2017, 7, 26);
+		LocalDate d2 = LocalDate.of(2017, 7, 29);
+		LocalDate d3 = LocalDate.of(2017, 7, 30);
+		LocalDate d4 = LocalDate.of(2017, 7, 2);
 
 		LocalTime s1 = LocalTime.of(12, 00);
 		LocalTime f1 = LocalTime.of(13, 00);
