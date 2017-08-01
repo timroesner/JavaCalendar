@@ -79,4 +79,14 @@ public class Month {
 	public String monthYearString() {
 		return this.date.getMonth().getDisplayName(TextStyle.FULL, SimpleCalendar.language) + " " + this.date.getYear();
 	}
+	
+	/**
+	 * Gets the currently selected date.
+	 * @return the selected date
+	 */
+	public LocalDate getSelectedDate()
+	{
+		return date;
+	}
+	
 }

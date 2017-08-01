@@ -1,0 +1,343 @@
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import java.util.*;
+import java.time.*;
+/*
+ * 
+ * 1) is there a more efficient way to implement the toString method (not n^2)?
+ * 2) a method that takes a date as a parameter and if there are events on that date
+ * 		returns a string with its info
+ */
+import java.time.format.DateTimeFormatter;
+
+/**
+ * A scheduler contains and maintains a reference to the events that can be created, loaded, or discarded. 
+ * It serves as the model in the program.
+ */
+public class Scheduler {
+
+	//TreeMap maps LocalDate to event
+	TreeMap<LocalDate, TreeSet<CalendarEvent>> schedule;
+	ArrayList<ChangeListener> listeners;
+	private LocalDate currentDate;
+	private LocalDate selectedDate;
+
+	/**
+	 * Constructs a Scheduler object. 
+	 */
+	public Scheduler() 
+	{
+		schedule = new TreeMap<LocalDate, TreeSet<CalendarEvent>>();
+		listeners = new ArrayList<ChangeListener>();
+		currentDate = LocalDate.now();
+		selectedDate = currentDate;
+	}
+
+	/**
+	 * Schedules new event with Event object as a parameter.
+	 * @param event event to be created
+	 */
+	public void createEvent(CalendarEvent event)
+	{
+		LocalDate date = event.getDate();		//create calendar instance
+		addEvent(date, event);
+		update();
+	}
+
+	/**
+	 * Schedules new event with event details as parameters.
+	 * @param title the event title
+	 * @param date the event date
+	 * @param startingTime the event starting time
+	 * @param endingTime the event ending time
+	 */
+	public void createEvent(String title, String date, String startingTime, String endingTime)
+	{
+		CalendarEvent e;
+		//if there is no given ending time
+		if (endingTime == null)
+			e = new CalendarEvent(title, date, startingTime);
+		else
+			e = new CalendarEvent(title, date, startingTime, endingTime);
+		LocalDate d = e.getDate();
+		addEvent(d, e);
+		update();
+	}
+
+	/**
+	 * Maps calendar to an event.
+	 * @param date the date of the event
+	 * @param e event to be mapped
+	 */
+	private void addEvent(LocalDate date, CalendarEvent e)
+	{
+		//if the key has NOT been used before
+		//create a new TreeSet<Event> Object, add the value
+		//and map the ArrayList to the new key
+		if (!schedule.containsKey(date))
+		{
+			TreeSet<CalendarEvent> events = new TreeSet<>();	//dummy variable
+			events.add(e);
+			schedule.put(date, events);
+		}
+		//else, if the key has been used before
+		//access the TreeSet and add the new value to it
+		else
+			schedule.get(date).add(e);
+	}
+
+	/**
+	 * Deletes an event by selected date.
+	 * @param stringDate a string representation of the selected date
+	 */
+	public void deleteEvent(String stringDate)
+	{
+
+		//convert the stringDate into a LocalDate object
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/d/yyyy");
+		LocalDate date = LocalDate.parse(stringDate, formatter);
+		//LocalDate to be removed from the map. Initialize it to a dummy value.
+		LocalDate removeMe = LocalDate.now();
+
+		for(LocalDate ld : schedule.keySet())
+		{
+			if (ld.equals(date))	//if date is found
+			{
+				removeMe = ld;
+				break;
+			}
+		}
+		//remove the key and value from map
+		schedule.remove(removeMe, schedule.get(removeMe));
+		update();
+	}
+
+	/**
+	 * Deletes all events scheduled in calendar
+	 */
+	public void deleteAllEvents()
+	{
+		schedule.clear();
+		update();
+	}
+
+	/**
+	 * Loads "events.txt" to populate the calendar with events.
+	 * @throws IOException
+	 */
+	public void load() throws IOException
+	{
+
+		//build chain of readers
+		FileReader fr =  new FileReader("events.txt");
+		BufferedReader br = new BufferedReader(fr);
+		EventReader er = new EventReader(br);
+
+		//initialize Event e with dummy values
+		CalendarEvent e = new CalendarEvent("", "12/12/2011", "10:00", "12:00");
+		//read event and check if it's null
+		while ((e = er.readEvent()) != null)	
+		{
+			createEvent(e);			//schedule event into calendar
+		}
+	}
+
+	/**
+	 * Saves all scheduled events in a text file called "events.txt" in the 
+	 * order of starting date and time
+	 * @throws IOException
+	 */ 
+	public void save() throws IOException
+	{
+		PrintWriter writer = new PrintWriter("events.txt");
+		writer.println(this.toString());
+
+		writer.close();
+	}
+
+	/**
+	 * Gets the scheduler in String format.
+	 */
+	public String browseEvents()
+	{
+		return this.toString();
+	}
+
+	/**
+	 * Converts the scheduler to String. 
+	 */
+	public String toString()
+	{
+		String s = "";
+		//add all events to s, using the event.toString method
+		for (LocalDate ld : schedule.keySet())
+		{
+			s += treeSetToString(schedule.get(ld));
+		}
+		return s;
+	}
+
+	/**
+	 * Converts multiple events in a TreeSet<Event> into String.
+	 * @param events TreeSet<Event> containing multiple events
+	 * @return a String format of events in TreeSet
+	 */
+	private String treeSetToString(TreeSet<CalendarEvent> events)
+	{
+		String s = "";							//create an empty string
+		for (CalendarEvent e : events)			//loop over the events in the TreeSet
+		{
+			s += e.toString() + "\n";	//convert each event into String,
+			//and add it to the empty String
+		}
+		return s;					
+	}
+
+	/**
+	 * Gets event information on a given date in the following format: Title startingTime - endingTime
+	 * @param date the given date  
+	 * @return a string with the event information in the required format
+	 */
+	public String getEventsOnThisDay(LocalDate d)
+	{
+		String s = "";
+
+		if (schedule.containsKey(d))
+			for(CalendarEvent e : schedule.get(d))
+			{
+				if (e.getEndHrsMins() == null)
+					s += e.getTitle()+ " " + e.getStartHrsMins() + "\n\n";
+				else
+					s += e.getTitle()+ " " + e.getStartHrsMins() + " - " + e.getEndHrsMins() +"\n\n";
+			}
+		return s;
+	}
+
+	/**
+	 * Checks for events on a given date.
+	 * @param date the given date
+	 * @return true if the given date has any scheduled events
+	 */
+	public boolean hasEvents(LocalDate d)
+	{
+		boolean flag;
+
+		if (schedule.containsKey(d))
+			flag = true;
+		else
+			flag = false;
+		return flag;
+	}
+
+	/**
+	 * Given a CalendarEvent object, the schedule checks if there is a time conflict with 
+	 * any of the existing events scheduled on the same date.
+	 * @param e the given CalendarEvent 
+	 * @return true if the given event clashes with any of the scheduled ones
+	 */
+	public boolean checkForTimeConflict(CalendarEvent e)
+	{
+		//get date of the given event
+		LocalDate eventDay = e.getDate();
+		//get starting and ending times of the given event
+		int eStartTime = e.getIntegerStartTime();
+		int eEndTime = e.getIntegerEndTime();
+		//if this eventDay is already in the map
+		if (schedule.containsKey(eventDay))
+		{
+			//get the set of all events scheduled on the same date
+			TreeSet<CalendarEvent> eventsOnThisDay = schedule.get(eventDay);
+			//iterate over scheduled events to check for time conflict
+			for (CalendarEvent event : eventsOnThisDay)
+			{
+				//get the starting and ending times of each event
+				int startTime = event.getIntegerStartTime();
+				int endTime = event.getIntegerEndTime();
+				//check for all possible invalid examples 
+				if (eStartTime == startTime || (eStartTime > startTime && eStartTime < endTime)
+						|| (eStartTime < startTime && eEndTime > startTime))
+					return true;
+			}
+		}
+
+		return false;
+	}
+	
+	/**
+	 * Attaches a listener to the model.
+	 * @param c the ChangeListener
+	 */
+	public void attach(ChangeListener c)
+	{
+		listeners.add(c);
+	}
+
+	/**
+	 * Model Accessor.
+	 * @return map of scheduled events
+	 */
+	public TreeMap<LocalDate, TreeSet<CalendarEvent>> getData()
+	{
+		return schedule;
+	}
+
+	/**
+	 * Notifies the views that there is a change. Called whenever 
+	 * an event is created/deleted or when the selected date changes.
+	 */
+	public void update()
+	{
+		//notify views that there is a change
+		for (ChangeListener c : listeners)
+		{
+			c.stateChanged(new ChangeEvent(this));
+		}
+	}
+
+	/**
+	 * Changes the selectedDate and calls the update() method.
+	 * @param d the new selectedDate
+	 */
+	public void setSelectedDate(LocalDate d)
+	{
+		selectedDate = d;
+		update();
+	}
+
+	/**
+	 * Gets the current selectedDate.
+	 * @return the selectedDate
+	 */
+	public LocalDate getSelectedDate()
+	{
+		return selectedDate;
+	}
+
+
+//	public static void main(String[] args)
+//	{
+//		Scheduler scheduler = new Scheduler();
+//		CalendarEvent e = new CalendarEvent("Test Event", "01/10/2017", "12:30", "14:30");
+//		scheduler.createEvent(e);
+//		scheduler.createEvent("Doctor's Appointment", "08/7/2017", "16:30", "18:30");
+//		System.out.println(scheduler.toString());
+//		System.out.println(scheduler.browseEvents());
+//		scheduler.deleteEvent("08/7/2017");
+//		System.out.println(scheduler.toString());
+//		scheduler.deleteAllEvents();
+//		System.out.println(scheduler.toString());
+//
+//
+//	}
+
+}
