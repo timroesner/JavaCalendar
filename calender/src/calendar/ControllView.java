@@ -16,8 +16,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<JTextField> labels = new ArrayList<>();
 	private ArrayList<LocalDate> dates = new ArrayList<>();
 	private Event generalEvent = new Event();
-	// private DayViewPanel dayView = new DayViewPanel();
-	private WeekViewPanel weekViewPanel = new WeekViewPanel();
+	private DayViewPanel dayView = new DayViewPanel();
 
 	public ControllView(Month month) {
 
@@ -138,7 +137,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		navPanel.add(agendaPanelBtn);
 		navPanel.add(quit);
 		rightView.add(navPanel);
-		rightView.add(weekViewPanel);
+		rightView.add(dayView);
 		add(monthView);
 		add(rightView);
 	}
@@ -149,7 +148,7 @@ public class ControllView extends JPanel implements ChangeListener {
 
 	// If stateChanged update panels
 	public void stateChanged(ChangeEvent e) {
-		weekViewPanel.update(month);
+		dayView.update(month);
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
 		dates.clear();

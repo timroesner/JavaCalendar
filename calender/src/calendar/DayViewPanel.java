@@ -19,6 +19,9 @@ public class DayViewPanel extends JPanel {
 	private ArrayList<Event> eventsOnDay = new ArrayList<>();
 
 	public DayViewPanel() {
+		
+		eventsOnDay.clear();
+		labels = new JLabel[24];
 
 		// Enclosing panel with GridBagLayout
 		JPanel panel = new JPanel();
@@ -34,7 +37,7 @@ public class DayViewPanel extends JPanel {
 			}
 		}
 
-		// Create all 24 lables for each hour of the day
+		// Create all 24 labels for each hour of the day
 		for (int hour = 0; hour < 24; hour++) {
 			LocalTime time = LocalTime.of(hour, 0);
 			JLabel timeLbl = new JLabel(time.toString());
@@ -46,11 +49,13 @@ public class DayViewPanel extends JPanel {
 			gap.setBackground(Color.white);
 			gap.setOpaque(true);
 			gap.setBorder(BorderFactory.createLineBorder(Color.black));
+			labels[hour] = gap;
 
-			// If event is hapning make background blue and add title of events
+			// If event is happening make background blue and add title of events
 			for (Event event : eventsOnDay) {
 				if (event.startTime.getHour() == hour) {
 					labels[hour].setText(event.title);
+					labels[hour].setForeground(Color.white);
 					labels[hour].setBackground(Color.BLUE);
 				}
 				if (event.startTime.getHour() < hour && hour < event.endTime.getHour()) {
@@ -59,7 +64,6 @@ public class DayViewPanel extends JPanel {
 			}
 
 			// Add labels with preffered size
-			labels[hour] = gap;
 			c.gridx = 0;
 			c.gridy = hour;
 			c.gridwidth = 1;
