@@ -263,6 +263,6 @@ public class Event implements Comparable<Event>{
 	
 	public String holidayToString()
 	{
-		return getTitle() + " " + getDate();
+		return getTitle() + getDate();
 	}
 }

@@ -7,12 +7,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-/**
- * 
- * @author sarahsaber
- * A concrete strategy class that implements the HolidayReader interface.
- * This class reads all Canadian Holidays in 2017 from a text file.
- */
 public class CanadaHolidayReader implements HolidayReader {
 
 	//instance variables
@@ -25,8 +19,8 @@ public class CanadaHolidayReader implements HolidayReader {
 	{	}
 
 	/**
-	 * Returns an ArrayList<Event> containing all Canadian Holidays in 2017 parsed from
-	 * 'CanadaHolidays.txt'. 
+	 * Returns an ArrayList<Event> containing all USA Holidays in 2017 parsed from
+	 * 'USAHoliday.txt'. 
 	 * @return the ArrayList<Event> containing the holidays
 	 */
 	public ArrayList<Event> readHolidays() throws IOException {

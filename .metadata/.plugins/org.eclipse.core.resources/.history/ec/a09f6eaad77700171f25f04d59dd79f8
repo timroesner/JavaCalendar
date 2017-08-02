@@ -13,12 +13,16 @@ import java.util.TreeSet;
 import java.util.List;
 
 /*
- * 1) when clicking "from file", should a dialogue be shown (for selecting the specific file)
- * 2) test the "Quit" button after clicking the "From File" button
- * 3) keep track of today in the month view
- * 4) change the color of today in the calendar months GUI 
- * 5) add a label to the day view showing the current date: WeekDay MM/DD/YYYY
- * 6) the calendar month arrows shouldn't change the currently selected views
+ * 1) changing days doesn't update month/day/week
+ * 2) creating new events in the month view and week views does not update the panel
+ * 3) after creating events or loading them from file, the program crashes when you switch to 
+ * 	week view
+ * 	-> I think it's because WeekViewPanel doesn't implement ChangeListener
+ * 4) when clicking "from file", should a dialogue be shown (for selecting the specific file)
+ * 5) test the "Quit" button after clicking the "From File" button
+ * 6) keep track of today in the month view
+ * 7) change the color of today in the calendar months GUI 
+ * 8) add a label to the day view showing the current date: WeekDay MM/DD/YYYY
  */
 
 /**

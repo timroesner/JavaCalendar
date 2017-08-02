@@ -7,42 +7,35 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-/**
- * 
- * @author sarahsaber
- * A concrete strategy class that implements the HolidayReader interface.
- * This class reads all Canadian Holidays in 2017 from a text file.
- */
-public class CanadaHolidayReader implements HolidayReader {
+
+public class USAHolidayReader implements HolidayReader {
 
 	//instance variables
-	private File canadaHolidays = new File("./CanadaHolidays.txt");	//File that contains all Canadian Holidays in 2017
-
+	private File usaHolidays = new File("./USAHolidays.txt");	//File that contains all the US Holidays in 2017
+	
 	/**
 	 * No-args constructor
 	 */
-	public CanadaHolidayReader()
+	public USAHolidayReader()
 	{	}
 
 	/**
-	 * Returns an ArrayList<Event> containing all Canadian Holidays in 2017 parsed from
-	 * 'CanadaHolidays.txt'. 
-	 * @return the ArrayList<Event> containing the holidays
+	 * 
 	 */
 	public ArrayList<Event> readHolidays() throws IOException {
-
+		
 		ArrayList<Event> result = new ArrayList<>();
-
+		
 		//check if the file exits
-		if (!(canadaHolidays.exists()))
+		if (!(usaHolidays.exists()))
 		{
 			System.out.println("File 'USAHolidays.txt' does not exist");
 		}
-
+		
 		//build chain of readers
-		FileReader fr = new FileReader(canadaHolidays);
+		FileReader fr = new FileReader(usaHolidays);
 		BufferedReader br = new BufferedReader(fr);
-
+		
 		String line;
 		//while the EOF hasn't been reached
 		while ((line = br.readLine()) != null)
@@ -57,15 +50,15 @@ public class CanadaHolidayReader implements HolidayReader {
 		//close chain of readers
 		br.close();
 		fr.close();
-
+		
 		return result;
 	}
-
+	
 	public static void main(String[] args)
 	{
-		CanadaHolidayReader canadaHolidays = new CanadaHolidayReader();
+		USAHolidayReader usReader = new USAHolidayReader();
 		try {
-			ArrayList<Event> holidays = canadaHolidays.readHolidays();
+			ArrayList<Event> holidays = usReader.readHolidays();
 			for (Event h : holidays)
 				System.out.println(h.holidayToString());
 		} catch (IOException e) {

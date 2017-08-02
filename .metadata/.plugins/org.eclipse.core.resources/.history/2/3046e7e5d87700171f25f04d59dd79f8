@@ -34,11 +34,6 @@ public class Event implements Comparable<Event>{
 			this.endTime = endTime;
 	}	
 	
-	/**
-	 * All-day holiday Event constructor 
-	 * @param title takes a String
-	 * @param date takes a LocalDate
-	 */
 	public Event(String title, LocalDate date)
 	{
 		this.title = title;
@@ -259,10 +254,5 @@ public class Event implements Comparable<Event>{
 	{
 		return getTitle() + " " + getDate() + " " + getStartTime()
 		+ "-" + getEndTime();
-	}
-	
-	public String holidayToString()
-	{
-		return getTitle() + " " + getDate();
 	}
 }
