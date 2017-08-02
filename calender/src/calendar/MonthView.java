@@ -12,9 +12,16 @@ import java.util.TreeSet;
 import java.util.List;
 
 /*
- * 1) changing days doesn't update month or even day
- * 2) creating new events in the month view does not update the panel
- * 3) remove space between weekdays and panes
+ * 1) changing days doesn't update month/day/week
+ * 2) creating new events in the month view and week views does not update the panel
+ * 3) after creating events or loading them from file, the program crashes when you switch to 
+ * 	week view
+ * 	-> I think it's because WeekViewPanel doesn't implement ChangeListener
+ * 4) when clicking "from file", should a dialogue be shown (for selecting the specific file)
+ * 5) test the "Quit" button after clicking the "From File" button
+ * 6) keep track of today in the month view
+ * 7) change the color of today in the calendar months GUI 
+ * 8) add a label to the day view showing the current date: WeekDay MM/DD/YYYY
  */
 
 /**
@@ -28,6 +35,7 @@ public class MonthView extends JPanel implements ChangeListener {
 	private Calendar calendar;
 	private Pane[] textPanes;
 	private LocalDate selectedDate;
+	private LocalDate today;
 	private JPanel gridPanel;
 
 	/**
@@ -39,6 +47,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		calendar = c;
 		selectedDate = SimpleCalendar.month.getSelectedDate();
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
+		today = LocalDate.now();
 		gridPanel = new JPanel();
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -119,6 +128,15 @@ public class MonthView extends JPanel implements ChangeListener {
 
 			pane.removeAll();
 			pane.updateUI();
+			
+			
+//			//create dummy LocalDate variable from the pane's day value
+//			LocalDate dummy = LocalDate.of(date.getYear(), date.getMonthValue(), 
+//					Integer.parseInt(pane.getDayValueText().trim()));
+//			if (dummy.equals(today))
+//				pane.getDayValue().setBackground(Color.black);
+//			else
+//				pane.getDayValue().setBackground(null);
 			pane.insertComponent(pane.getDayValue());
 			gridPanel.add(pane);
 		}
