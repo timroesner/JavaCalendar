@@ -1,0 +1,214 @@
+package calendar;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+
+/**
+ * 
+ * @author sarahsaber
+ *
+ */
+
+public class RecurringEventReader {
+
+	//instance variables
+	private BufferedReader br;
+
+	/*
+	 * "From File" function through which user can specify a file containing recurring events. 
+	 * Recurring events will be scheduled only though this option. The file can contain events for 
+	 * the future as well as those from the past. For simplicity, assume that the user of the program
+	 *  will use this function only once right after the program starts. When your team submits the soft copy, 
+	 *  include input.txt containing at least 10 different events that will processed by this function.
+	 *   Note that input.txt will contain recurring events only.
+	 *   Each event in the input.txt takes up one line and consists of the following items separated by a semi-colon ;
+	 *   	event name: a name can have a space
+	 *   	year: 4 digits	
+	 *   	starting month: 1 ~ 12
+	 *   	ending month: 1 ~ 12
+	 *   	days: days will be a sequence of day abbreviations, SMTWHFA, without any space in it. 
+	 *   Days can be any order. No space is allowed in days
+	 *   	starting time: use 24 hour system (0 ~ 23)
+	 *   	ending time: use 24 hour system (0 ~ 23)
+	 *   
+	 *   For example, the following line schedules Math Class on every M,W,F from January to February 2014. 
+	 *   The class starts from 5:00 pm and ends at 6:00 pm on the scheduled date.
+	 *   	Math Class;2014;1;2;MWF;17;18;
+	 */
+
+	/**
+	 * Constructs RecurringEventReader object.
+	 * @param br BufferedReader object
+	 */
+	public RecurringEventReader(BufferedReader br)
+	{
+		this.br = br;
+	}
+
+	/**
+	 * Given a string of weekDays, this method returns the equivalent DayOfWeek enums in an ArrayList
+	 * @param weekDays the given string
+	 * @return ArrayList of DayOfWeek enums
+	 */
+	public ArrayList<DayOfWeek> getCorrespondingDayOfWeek(String weekDays)
+	{
+		ArrayList<DayOfWeek> daysOfWeekEnum = new ArrayList<>();
+		for (int i = 0; i < weekDays.length(); i++)
+		{
+			switch (weekDays.charAt(i))
+			{
+			case 'M':
+				daysOfWeekEnum.add(DayOfWeek.MONDAY);
+				break;
+			case 'T':
+				daysOfWeekEnum.add(DayOfWeek.TUESDAY);
+				break;
+			case 'W':
+				daysOfWeekEnum.add(DayOfWeek.WEDNESDAY);
+				break;
+			case 'H':
+				daysOfWeekEnum.add(DayOfWeek.THURSDAY);
+				break;
+			case 'F':
+				daysOfWeekEnum.add(DayOfWeek.FRIDAY);
+				break;
+			case 'A':
+				daysOfWeekEnum.add(DayOfWeek.SATURDAY);
+				break;
+			case 'S':
+				daysOfWeekEnum.add(DayOfWeek.SUNDAY);
+				break;
+			}
+		}
+		return daysOfWeekEnum;
+	}
+
+	public ArrayList<Event> createRecurringEvent(Event e, LocalDate startDate, LocalDate endDate, String weekDays,
+			LocalTime startTime, LocalTime endTime)
+	{
+		ArrayList<Event> recurringEvents = new ArrayList<>();
+		ArrayList<DayOfWeek> weekDaysEnum = getCorrespondingDayOfWeek(weekDays);
+
+		//iterate over the days on which the event is occurring
+		for (DayOfWeek day : weekDaysEnum)
+		{
+			//get the integer value of the DayOfWeek
+			int dayValue = day.getValue();
+			LocalDate date = startDate;
+			//iterate over all dates from startDate till endDate
+			while(date.isBefore(endDate) || date.isEqual(endDate))
+			{
+				//if the dayValue equals the integer value of this iteration's DayOfWeek
+				if (dayValue == date.getDayOfWeek().getValue())
+				{
+					//create event and add it to the recurringEvents ArrayList
+					Event newEvent = new Event(e.getTitle(), date, startTime, endTime);
+					recurringEvents.add(newEvent);
+					//advance date 7 days
+					date.plusDays(7);
+				}
+				//else, go to the next day
+				else
+					date.plusDays(1);
+			}//end while
+		}//end for
+
+		return recurringEvents;
+	}
+
+	/**
+	 * Reads event information from text file.
+	 * @return ArrayList of all the instances of the recurring Event
+	 * @throws IOException
+	 */
+	public ArrayList<Event> readEvent() throws IOException
+	{
+		String line;
+		line = br.readLine();
+		//read the line and check if it's null, whitespace, or empty
+		if (line == null || line.length() == 0)	
+			return null;
+		//else
+		//split string around semi-colon
+		String[] details = line.split(";");
+
+		//parse event information from splitted string
+		String title = details[0];
+		int year = Integer.parseInt(details[1]);
+		int startingMonth = Integer.parseInt(details[2]);
+		int endingMonth = Integer.parseInt(details[3]);
+		String weekDays = details[4];
+		String startingTime = details[5] + ":00";
+		String endingTime = details[6] + ":00";
+
+		//in event class, add a method called loadRecurringEvents()
+		//for each line in the input.txt 
+		//create Recurring event
+		//schedule list of new events
+		//Day.values()
+
+		//specify the starting and ending period for the recurring event
+		LocalDate startingDate = LocalDate.of(year, startingMonth, 1);
+		//create a dummy variable with the first day of the ending month 
+		LocalDate dummy = LocalDate.of(year,endingMonth,1);
+		//specify the ending date using the dummy variable and changing its dayOfMonth to the last day
+		LocalDate endingDate = dummy.withDayOfMonth(dummy.lengthOfMonth());
+
+		//create dummy event
+		Event e = new Event(title, startingDate, LocalTime.parse(startingTime), LocalTime.parse(endingTime));
+
+		//return an ArrayList of all instances of this recurring event
+		return createRecurringEvent(e, startingDate, endingDate, weekDays, LocalTime.parse(startingTime),
+				LocalTime.parse(endingTime));		
+	}
+
+	public static void main(String[] args)
+	{
+		System.out.println("Starting");
+		File f = new File("./input.txt");
+		ArrayList<Event> result = new ArrayList<>();
+		
+		System.out.println("Checking if file exists");
+		if (!(f.exists()))
+		{
+			System.out.println("File 'input.txt' does not exist");
+			return;
+		}
+
+		try {
+			//build chain of readers
+			System.out.println("Building chain of readers");
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			RecurringEventReader er = new RecurringEventReader(br);
+
+			//create new ArrayList of events
+			ArrayList<Event> recurringEvents = new ArrayList<>();
+			//read ArrayList of recurring events and check if it's null
+			System.out.println("Starting to read events");
+			while ((recurringEvents = er.readEvent()) != null)	
+			{
+				System.out.println("Adding to result ArrayList");
+				//add all instances of the recurring event to result
+				result.addAll(recurringEvents);
+			}
+			//close chain of readers
+			System.out.println("Closing chain of readers");
+			br.close();
+			fr.close();
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("Printing result");
+		System.out.println(result.toString());
+
+	}
+
+}

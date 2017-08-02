@@ -16,6 +16,12 @@ import java.util.List;
  * 2) creating new events in the month view does not update the panel
  * 3) remove space between weekdays and panes
  */
+
+/**
+ * 
+ * @author sarahsaber
+ *  A JPanel that represents the Calendar Month View in GUI. 
+ */
 public class MonthView extends JPanel implements ChangeListener {
 
 	//instance variables
@@ -24,6 +30,10 @@ public class MonthView extends JPanel implements ChangeListener {
 	private LocalDate selectedDate;
 	private JPanel gridPanel;
 
+	/**
+	 * Constructs a MonthView object.
+	 * @param c a reference to the Calendar object (model)
+	 */
 	public MonthView(Calendar c)
 	{
 		calendar = c;
@@ -40,6 +50,9 @@ public class MonthView extends JPanel implements ChangeListener {
 		}
 	}
 
+	/**
+	 * Draws the drawView object.
+	 */
 	public void drawView()
 	{
 		//get current month
@@ -58,6 +71,10 @@ public class MonthView extends JPanel implements ChangeListener {
 
 	}
 
+	/**
+	 * Creates the individual month days.
+	 * @param date the currently selected localDate
+	 */
 	public void createGridPanel(LocalDate date)
 	{
 		//create new grid with 7 columns and 0 gaps both horizontally and vertically
@@ -104,6 +121,10 @@ public class MonthView extends JPanel implements ChangeListener {
 
 	}
 
+	/**
+	 * Display events scheduled on the currently selected day in the Month view.
+	 * @param date the currently selected date 
+	 */
 	private void displayEvents(LocalDate date)
 	{
 		//To keep track of events on that day
@@ -162,6 +183,10 @@ public class MonthView extends JPanel implements ChangeListener {
 	}
 
 	@Override
+	/**
+	 * Updates the MonthView upon a change in the model. 
+	 * @param e the event that notifies the view of the change
+	 */
 	public void stateChanged(ChangeEvent e) {
 
 		//remove any existing components in the MonthView panel
@@ -181,56 +206,60 @@ public class MonthView extends JPanel implements ChangeListener {
 		drawView();
 	}
 
+	/**
+	 * Gets the array of textPanes in the dayGUI.
+	 * @return the array of textPanes
+	 */
 	public Pane[] getTextPanes()
 	{
 		return textPanes;
 	}
 
-	public static void main(String[] args)
-	{
-		Calendar c = new Calendar(new ArrayList<Event>());
-		//Month m = new Month(c.today);
-		//s.setSelectedDate(LocalDate.now());
-		MonthView mv = new MonthView(c);
-		JFrame frame = new JFrame();
-		frame.setSize(800, 800);
-		frame.setLayout(new BorderLayout());
-
-		c.attach(mv);
-		//m.attach(mv);
-		//mv.drawView();
-		
-		LocalDate d1 = LocalDate.of(2017, 8, 26);
-		LocalDate d2 = LocalDate.of(2017, 8, 29);
-		LocalDate d3 = LocalDate.of(2017, 8, 30);
-		LocalDate d4 = LocalDate.of(2017, 8, 2);
-
-		LocalTime s1 = LocalTime.of(12, 00);
-		LocalTime f1 = LocalTime.of(13, 00);
-		LocalTime s2 = LocalTime.of(12, 00);
-		LocalTime f2 = LocalTime.of(13, 00);
-		LocalTime s3 = LocalTime.of(12, 00);
-		LocalTime f3 = LocalTime.of(13, 00);
-
-		Event e = new Event("Test Event", d1 , s1, f1);
-		Event e2 = new Event("Test Event", d2, s2, f2);
-		Event e3 = new Event("Test Event", d3, s3, f3);
-		Event e4 = new Event("Test Event", d4, s3, f3);
-
-		c.add(e);
-		c.add(e2);
-		c.add(e3);
-		c.add(e4);
-//		for (Pane p : mv.getTextPanes())
-//		{
-//			System.out.println(p.getText());
-//		}
-		//mv.drawView();
-		
-		frame.add(mv, BorderLayout.EAST);
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.pack();
-	}
+//	public static void main(String[] args)
+//	{
+//		Calendar c = new Calendar(new ArrayList<Event>());
+//		//Month m = new Month(c.today);
+//		//s.setSelectedDate(LocalDate.now());
+//		MonthView mv = new MonthView(c);
+//		JFrame frame = new JFrame();
+//		frame.setSize(800, 800);
+//		frame.setLayout(new BorderLayout());
+//
+//		c.attach(mv);
+//		//m.attach(mv);
+//		//mv.drawView();
+//		
+//		LocalDate d1 = LocalDate.of(2017, 8, 26);
+//		LocalDate d2 = LocalDate.of(2017, 8, 29);
+//		LocalDate d3 = LocalDate.of(2017, 8, 30);
+//		LocalDate d4 = LocalDate.of(2017, 8, 2);
+//
+//		LocalTime s1 = LocalTime.of(12, 00);
+//		LocalTime f1 = LocalTime.of(13, 00);
+//		LocalTime s2 = LocalTime.of(12, 00);
+//		LocalTime f2 = LocalTime.of(13, 00);
+//		LocalTime s3 = LocalTime.of(12, 00);
+//		LocalTime f3 = LocalTime.of(13, 00);
+//
+//		Event e = new Event("Test Event", d1 , s1, f1);
+//		Event e2 = new Event("Test Event", d2, s2, f2);
+//		Event e3 = new Event("Test Event", d3, s3, f3);
+//		Event e4 = new Event("Test Event", d4, s3, f3);
+//
+//		c.add(e);
+//		c.add(e2);
+//		c.add(e3);
+//		c.add(e4);
+////		for (Pane p : mv.getTextPanes())
+////		{
+////			System.out.println(p.getText());
+////		}
+//		//mv.drawView();
+//		
+//		frame.add(mv, BorderLayout.EAST);
+//		frame.setVisible(true);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		//frame.pack();
+//	}
 
 }
