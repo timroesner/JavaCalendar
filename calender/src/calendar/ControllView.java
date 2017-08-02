@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class ControllView extends JPanel implements ChangeListener {
 
 	private JLabel monthYear = new JLabel();
@@ -17,6 +19,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<LocalDate> dates = new ArrayList<>();
 	private Event generalEvent = new Event();
 	private DayViewPanel dayView = new DayViewPanel();
+	private WeekViewPanel weekViewPanel = new WeekViewPanel();
 
 	public ControllView(Month month) {
 
@@ -107,7 +110,7 @@ public class ControllView extends JPanel implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
 				rightView.add(navPanel);
-				rightView.add(new DayViewPanel());
+				rightView.add(dayView);
 				rightView.revalidate();
 				rightView.repaint();
 			}
@@ -116,7 +119,7 @@ public class ControllView extends JPanel implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
 				rightView.add(navPanel);
-				rightView.add(new WeekViewPanel());
+				rightView.add(weekViewPanel);
 				rightView.revalidate();
 				rightView.repaint();
 			}
@@ -149,6 +152,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	// If stateChanged update panels
 	public void stateChanged(ChangeEvent e) {
 		dayView.update(month);
+		weekViewPanel.update(month);
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
 		dates.clear();
