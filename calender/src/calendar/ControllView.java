@@ -19,7 +19,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private DayViewPanel dayView = new DayViewPanel();
 	private AgendaViewPanel agendaView ;
 
-	public ControllView(Month month) {
+	public ControllView(final Month month) {
 
 		this.month = month;
 		Calendar.events = generalEvent.loadEvents();
@@ -72,9 +72,9 @@ public class ControllView extends JPanel implements ChangeListener {
 		monthView.add(monthViewDays);
 
 		// Right view with NavPanel and DayViewPanel
-		JPanel rightView = new JPanel();
+		final JPanel rightView = new JPanel();
 		rightView.setLayout(new BoxLayout(rightView, BoxLayout.Y_AXIS));
-		JPanel navPanel = new JPanel();
+		final JPanel navPanel = new JPanel();
 		JButton left = new JButton("<");
 		JButton right = new JButton(">");
 		JButton create = new JButton("Create");
