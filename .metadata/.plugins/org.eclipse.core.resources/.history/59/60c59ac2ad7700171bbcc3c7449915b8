@@ -17,7 +17,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<LocalDate> dates = new ArrayList<>();
 	private Event generalEvent = new Event();
 	private DayViewPanel dayView = new DayViewPanel();
-	private WeekViewPanel weekViewPanel = new WeekViewPanel();
+
 	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
 	
 	public ControllView(Month month) {
@@ -110,7 +110,7 @@ public class ControllView extends JPanel implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
 				rightView.add(navPanel);
-				rightView.add(dayView);
+				rightView.add(new DayViewPanel());
 				rightView.revalidate();
 				rightView.repaint();
 			}
@@ -119,7 +119,7 @@ public class ControllView extends JPanel implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
 				rightView.add(navPanel);
-				rightView.add(weekViewPanel);
+				rightView.add(new WeekViewPanel());
 				rightView.revalidate();
 				rightView.repaint();
 			}
@@ -175,9 +175,6 @@ public class ControllView extends JPanel implements ChangeListener {
 	// If stateChanged update panels
 	public void stateChanged(ChangeEvent e) {
 		dayView.update(month);
-		weekViewPanel.update(month);
-		monthViewPanel.stateChanged(new ChangeEvent(this));
-		//monthViewPanel.update(month);
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
 		dates.clear();

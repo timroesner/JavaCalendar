@@ -176,7 +176,6 @@ public class ControllView extends JPanel implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		dayView.update(month);
 		weekViewPanel.update(month);
-		monthViewPanel.stateChanged(new ChangeEvent(this));
 		//monthViewPanel.update(month);
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
