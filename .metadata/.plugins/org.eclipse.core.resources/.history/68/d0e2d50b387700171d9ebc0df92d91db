@@ -86,17 +86,13 @@ public class MonthView extends JPanel implements ChangeListener {
 		List<String> weekDays = Arrays.asList("Sun", "Mon", "Tue",
 				"Wed", "Thu", "Fri", "Sat");
 
-		JPanel weekDaysPanel = new JPanel();
-		weekDaysPanel.setLayout(new GridLayout(0, 7, 0, 0));
 		//add labels with weekdays to the panel
 		for (String s : weekDays)
 		{
 			JLabel label = new JLabel(s);
 			label.setHorizontalAlignment(JLabel.CENTER);
-			label.setPreferredSize(new Dimension(10,30));
-			weekDaysPanel.add(label);
+			gridPanel.add(label);
 		}
-		this.add(weekDaysPanel);
 
 		//determine the name of the first day of month. 
 		//getValue returns the int value of the enum

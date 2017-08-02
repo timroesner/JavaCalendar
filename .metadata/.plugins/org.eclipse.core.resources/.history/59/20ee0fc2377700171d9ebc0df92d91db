@@ -31,7 +31,7 @@ public class Pane extends JTextPane{
 		dayValue.setBorder(new EmptyBorder(0,0,0,0));
 		this.insertComponent(dayValue);
 		this.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-		this.setPreferredSize(new Dimension(100,120));
+		this.setPreferredSize(new Dimension(80,70));
 	}
 	
 	/**

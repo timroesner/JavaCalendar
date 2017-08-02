@@ -93,7 +93,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		{
 			JLabel label = new JLabel(s);
 			label.setHorizontalAlignment(JLabel.CENTER);
-			label.setPreferredSize(new Dimension(10,30));
+			label.setPreferredSize(new Dimension(10,10));
 			weekDaysPanel.add(label);
 		}
 		this.add(weekDaysPanel);
