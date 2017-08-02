@@ -8,27 +8,40 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class AgendaViewPanel extends JPanel {
-	private ArrayList<Event> eventsOnAgenda = new ArrayList<>();
-
+	
+	private static ArrayList<Event> eventsOnAgenda = new ArrayList<>();
 	String agenda ;
 	JTextArea agendaDetail;
 	private Calendar calendar;
-	public Month month;
 
-	public AgendaViewPanel(Month month) {
+	public AgendaViewPanel() {
 
 		// creating the AgendaViewPanel
 		JPanel panel = new JPanel();
 		agendaDetail = new JTextArea(); // where the agenda is displayed
+		agenda = ""; // the string to save all the events
+		agendaDetail.setText(agenda);
+		panel.add(agendaDetail);
+
+		// Make panel scrollable
+		JScrollPane scrollPane = new JScrollPane(panel);
+		scrollPane.setPreferredSize(new Dimension(325, 200));
+		add(scrollPane);
+	}
+	
+	/**
+	 * update the agendaView when new event is added
+	 * @param 
+	 */
+	public void update(Month month){
 		agenda = "Events between " + month.startDate.toString() + " and " + month.endDate.toString() + '\n';
-
-		// Load all events between start date and end date
 		Event.sort();
+		eventsOnAgenda.clear() ;
+		// save updated events to eventsOnAgenda
 		for (Event event : calendar.events) {
-
-			if (event.date.equals(SimpleCalendar.month.startDate) || event.date.equals(SimpleCalendar.month.endDate))
+			if (event.date.equals(month.startDate) || event.date.equals(month.endDate))
 				eventsOnAgenda.add(event);
-			if (event.date.isAfter(SimpleCalendar.month.startDate) && event.date.isBefore(SimpleCalendar.month.endDate))
+			if (event.date.isAfter(month.startDate) && event.date.isBefore(month.endDate))
 				eventsOnAgenda.add(event);
 		}
 
@@ -38,14 +51,7 @@ public class AgendaViewPanel extends JPanel {
 		}
 		
 		if (eventsOnAgenda.size() == 0) agenda += "no events for selected period";
-
 		agendaDetail.setText(agenda);
-		panel.add(agendaDetail);
-
-		// Make panel scrollable
-		JScrollPane scrollPane = new JScrollPane(panel);
-		scrollPane.setPreferredSize(new Dimension(325, 200));
-		add(scrollPane);
 	}
 
 }

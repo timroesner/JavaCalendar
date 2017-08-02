@@ -9,6 +9,9 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import calendar.Event;
+import calendar.Month;
+
 public class ControllView extends JPanel implements ChangeListener {
 
 	private JLabel monthYear = new JLabel();
@@ -17,9 +20,11 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<LocalDate> dates = new ArrayList<>();
 	private Event generalEvent = new Event();
 	private DayViewPanel dayView = new DayViewPanel();
-	private AgendaViewPanel agendaView ;
-
-	public ControllView(final Month month) {
+	private WeekViewPanel weekViewPanel = new WeekViewPanel();
+	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
+	private AgendaViewPanel agendaView = new AgendaViewPanel();
+	
+	public ControllView(Month month) {
 
 		this.month = month;
 		Calendar.events = generalEvent.loadEvents();
@@ -72,9 +77,9 @@ public class ControllView extends JPanel implements ChangeListener {
 		monthView.add(monthViewDays);
 
 		// Right view with NavPanel and DayViewPanel
-		final JPanel rightView = new JPanel();
+		JPanel rightView = new JPanel();
 		rightView.setLayout(new BoxLayout(rightView, BoxLayout.Y_AXIS));
-		final JPanel navPanel = new JPanel();
+		JPanel navPanel = new JPanel();
 		JButton left = new JButton("<");
 		JButton right = new JButton(">");
 		JButton create = new JButton("Create");
@@ -83,6 +88,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		JButton weekPanelBtn = new JButton("Week");
 		JButton monthPanelBtn = new JButton("Month");
 		JButton agendaPanelBtn = new JButton("Agenda");
+		JButton fromFile = new JButton("From File");
 		JButton quit = new JButton("Quit");
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -108,7 +114,7 @@ public class ControllView extends JPanel implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
 				rightView.add(navPanel);
-				rightView.add(new DayViewPanel());
+				rightView.add(dayView);
 				rightView.revalidate();
 				rightView.repaint();
 			}
@@ -117,9 +123,23 @@ public class ControllView extends JPanel implements ChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
 				rightView.add(navPanel);
-				rightView.add(new WeekViewPanel());
+				rightView.add(weekViewPanel);
 				rightView.revalidate();
 				rightView.repaint();
+			}
+		});
+		fromFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Event> recurringEvents = generalEvent.loadRecurringEvents();
+				//iterating over entire ArrayList instead of using the addAll() method
+				//because the views are only notified when the Calendar.add() method is invoked
+				for (Event event : recurringEvents)
+				{
+					Calendar.events.add(event);
+				}
+				monthViewPanel.stateChanged(new ChangeEvent(this));
+				dayView.update(month);
+				weekViewPanel.update(month);
 			}
 		});
 		quit.addActionListener(new ActionListener() {
@@ -128,7 +148,17 @@ public class ControllView extends JPanel implements ChangeListener {
 				System.exit(0);
 			}
 		});
-		
+		monthPanelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				rightView.removeAll();
+				rightView.add(navPanel);
+				rightView.add(monthViewPanel);
+				monthViewPanel.stateChanged(new ChangeEvent(this));
+				rightView.revalidate();
+				rightView.repaint();
+			}
+		});
 		agendaPanelBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -159,7 +189,7 @@ public class ControllView extends JPanel implements ChangeListener {
 							SimpleCalendar.month.startDate = LocalDate.parse(startTxt.getText(), Calendar.formatter);
 							SimpleCalendar.month.endDate = LocalDate.parse(endTxt.getText(), Calendar.formatter);
 							// create new AgendaView
-							agendaView = new AgendaViewPanel(month);
+							agendaView.update(month);
 							rightView.removeAll();
 							rightView.add(navPanel);
 							rightView.add(agendaView);
@@ -185,7 +215,6 @@ public class ControllView extends JPanel implements ChangeListener {
 				frame.setVisible(true);
 			}
 		});
-		
 		navPanel.add(today);
 		navPanel.add(left);
 		navPanel.add(right);
@@ -194,6 +223,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		navPanel.add(weekPanelBtn);
 		navPanel.add(monthPanelBtn);
 		navPanel.add(agendaPanelBtn);
+		navPanel.add(fromFile);
 		navPanel.add(quit);
 		rightView.add(navPanel);
 		rightView.add(dayView);
@@ -208,6 +238,10 @@ public class ControllView extends JPanel implements ChangeListener {
 	// If stateChanged update panels
 	public void stateChanged(ChangeEvent e) {
 		dayView.update(month);
+		weekViewPanel.update(month);
+		monthViewPanel.stateChanged(new ChangeEvent(this));
+		agendaView.update(month);
+		//monthViewPanel.update(month);
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
 		dates.clear();
