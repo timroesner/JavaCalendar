@@ -17,7 +17,6 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<LocalDate> dates = new ArrayList<>();
 	private Event generalEvent = new Event();
 	private DayViewPanel dayView = new DayViewPanel();
-	private AgendaViewPanel agendaView ;
 
 	public ControllView(Month month) {
 
@@ -128,64 +127,6 @@ public class ControllView extends JPanel implements ChangeListener {
 				System.exit(0);
 			}
 		});
-		
-		agendaPanelBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// pop out a new window for use to select dates
-				final JFrame frame = new JFrame();
-				JPanel panel = new JPanel();
-				panel.setLayout(new FlowLayout());
-			    // add buttons and textFiled to the pop out window 
-				JLabel start = new JLabel("Start Date:");
-				final JTextField startTxt = new JTextField("08/01/2017");
-				JLabel end = new JLabel("End Date:");
-				final JTextField endTxt = new JTextField("08/01/2017");
-				JButton cancel = new JButton("Cancel");
-				JButton ok = new JButton("OK");
-				//add actionListener to cancel button
-				cancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						frame.dispose();
-
-					}
-				});
-
-				//add actionListener to OK button
-				ok.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						try { // update the month.startDate and month.endDate
-							SimpleCalendar.month.startDate = LocalDate.parse(startTxt.getText(), Calendar.formatter);
-							SimpleCalendar.month.endDate = LocalDate.parse(endTxt.getText(), Calendar.formatter);
-							// create new AgendaView
-							agendaView = new AgendaViewPanel(month);
-							rightView.removeAll();
-							rightView.add(navPanel);
-							rightView.add(agendaView);
-							rightView.revalidate();
-							rightView.repaint();
-							frame.dispose();
-						} catch (Exception e2) {
-							System.out.println("error");
-						};
-					}
-				});
-
-				panel.add(start);
-				panel.add(startTxt);
-				panel.add(end);
-				panel.add(endTxt);
-				panel.add(ok);
-				panel.add(cancel);
-
-				frame.add(panel);
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				frame.pack();
-				frame.setVisible(true);
-			}
-		});
-		
 		navPanel.add(today);
 		navPanel.add(left);
 		navPanel.add(right);
