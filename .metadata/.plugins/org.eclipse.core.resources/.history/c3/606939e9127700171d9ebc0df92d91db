@@ -1,0 +1,194 @@
+package calendar;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+/**
+ * 
+ * @author sarahsaber
+ *
+ */
+
+public enum Day {
+	M, T, W, H, F, A, S,
+}
+
+public class RecurringEventReader {
+
+	//instance variables
+	private BufferedReader br;
+
+	/*
+	 * "From File" function through which user can specify a file containing recurring events. 
+	 * Recurring events will be scheduled only though this option. The file can contain events for 
+	 * the future as well as those from the past. For simplicity, assume that the user of the program
+	 *  will use this function only once right after the program starts. When your team submits the soft copy, 
+	 *  include input.txt containing at least 10 different events that will processed by this function.
+	 *   Note that input.txt will contain recurring events only.
+	 *   Each event in the input.txt takes up one line and consists of the following items separated by a semi-colon ;
+	 *   	event name: a name can have a space
+	 *   	year: 4 digits	
+	 *   	starting month: 1 ~ 12
+	 *   	ending month: 1 ~ 12
+	 *   	days: days will be a sequence of day abbreviations, SMTWHFA, without any space in it. 
+	 *   Days can be any order. No space is allowed in days
+	 *   	starting time: use 24 hour system (0 ~ 23)
+	 *   	ending time: use 24 hour system (0 ~ 23)
+	 *   
+	 *   For example, the following line schedules Math Class on every M,W,F from January to February 2014. 
+	 *   The class starts from 5:00 pm and ends at 6:00 pm on the scheduled date.
+	 *   	Math Class;2014;1;2;MWF;17;18;
+	 */
+	
+	/**
+	 * Constructs RecurringEventReader object.
+	 * @param br BufferedReader object
+	 */
+	public RecurringEventReader(BufferedReader br)
+	{
+		this.br = br;
+	}
+
+	/**
+	 * Reads event information from text file.
+	 * @return Event object with read info
+	 * @throws IOException
+	 */
+	public Event readEvent() throws IOException
+	{
+		String line;
+		line = br.readLine();
+		//read the line and check if it's null, whitespace, or empty
+		if (line == null || line.length() == 0)	
+			return null;
+		//else
+		//split string around semi-colon
+		String[] details = line.split(";");
+		
+		LocalDate date;
+		String title = details[0];
+		int year = Integer.parseInt(details[1]);
+		int startingMonth = Integer.parseInt(details[2]);
+		int endingMonth = Integer.parseInt(details[3]);
+		String weekDays = details[4];
+		String startingTime = details[5];
+		String endingTime = details[6];
+
+		date = LocalDate.of(year, startingMonth, 1);
+		//date.getDayOfWeek().getValue();
+		//d = LocalDate.
+		//Math Class;2014;1;2;MWF;17;18;
+		
+//		//if line has only four characters, ex: 2017, 2016
+//		if (line.length() == 4)
+//		{
+//			year = line;				//initialize event year
+//			line = br.readLine();		//read the next line
+//		}
+//
+//		Event e = null;
+//		//read weekDay, month, monthDay, startingTime, endingTime if any, title
+//		//split at "-"
+//		String[] values = line.split("-");
+//
+//		//	if there are two cells: 
+//		//		in the first cell: weekDay month monthDay year startingTime
+//		//		in the second cell: endingTime title
+//		if (values.length == 2)
+//		{
+//			//split once more at "whitespace"
+//			String[] detailsPartOne = values[0].split("\\s+");
+//			String[] detailsPartTwo = values[1].split("\\s+");
+//
+//			//convert read date into required format: 
+//			//from EEEE MMMM d -> MM/dd/yyyy
+//			String stringDate = "";
+//			//concatenate stringDate
+//			stringDate += detailsPartOne[0] + " " + detailsPartOne[1] + " " + detailsPartOne[2]
+//					+ " " + detailsPartOne[3];
+//			stringDate = convertDate(stringDate);
+//
+//			/* NOTE: when split at whitespace, the first cell in 
+//			 * detailsPartTwo is an empty string, therefore in implementation:
+//			 * add 1 to the required cell
+//			 * if the size of detailsPartTwo > 2		in implementation: > 3 
+//			 * title is not one word
+//			 * first cell -> endingTime			in implementation: second cell
+//			 * concatenate other cells to get the title
+//			 */
+//			if (detailsPartTwo.length > 3)
+//			{
+//				String endingTime = detailsPartTwo[1];
+//				String title = "";
+//				for (int i = 2; i < detailsPartTwo.length; i++)
+//				{
+//					title += detailsPartTwo[i] + " ";
+//				}
+//				//create event
+//				e = new Event(title, stringDate, detailsPartOne[4], endingTime);
+//			}
+//			//else if title is one word
+//			else	
+//				e = new Event(detailsPartTwo[2], stringDate, detailsPartOne[4], detailsPartTwo[1]);
+//			//(String title, String date, String start, String end)
+//
+//		}
+//
+//		//	if there is only one cell:
+//		//		in the first cell: weekDay month monthDay year startingTime title
+//		else if (values.length == 1)
+//		{
+//			//split once more at "whitespace"
+//			String[] details = values[0].split("\\s+");
+//			String startingTime = details[3];
+//			String stringDate = "";
+//			stringDate += details[0] + " " + details[1] + " " + details[2] + " " + details[3];
+//			stringDate = convertDate(stringDate);
+//
+//			//if the size of details > 6
+//			//then the title is not one word
+//			// from cell number 6 and upwards, concatenate title
+//			if (details.length > 6)
+//			{
+//				String title = "";
+//				for (int i = 5; i < details.length; i++)
+//				{
+//					title += details[i];
+//				}
+//				e = new Event(title, stringDate, startingTime);
+//			}
+//			else //title is only one word
+//				e = new Event(details[5], stringDate, startingTime);
+//		}
+//
+//		return e;
+	}
+
+	//	/**
+	//	 * Converts the date parsed from the textFile from the EEEE MMMM d yyyy format into the MM/dd/yyyy format.
+	//	 * @param stringDate parsed string date
+	//	 * @return a string date with the new format. 
+	//	 */
+	//	private String convertDate(String stringDate) 
+	//	{
+	//
+	//		//from EEEE MMMM d yyyy -> MM/dd/yyyy
+	//
+	//		DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+	//				.parseCaseInsensitive()
+	//				.append(DateTimeFormatter.ofPattern("EEEE MMMM d yyyy"))
+	//				.toFormatter();
+	//
+	//
+	//		LocalDate parsedDate = LocalDate.parse(stringDate, formatter);
+	//		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM/d/yyyy");
+	//
+	//		String formattedStringDate = parsedDate.format(formatter2);
+	//
+	//		return formattedStringDate;
+	//	}
+
+}

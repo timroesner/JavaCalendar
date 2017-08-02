@@ -25,8 +25,11 @@ public class SimpleCalendar {
 
 	public static void main(String[] args) {
 		ControllView monthView = new ControllView(month);
+		MonthView monthGUI = new MonthView(calendar);
 		calendar.attach(monthView);
+		calendar.attach(monthGUI);
 		month.attach(monthView);
+		month.attach(monthGUI);
 		frame.setLayout(new FlowLayout());
 		frame.add(monthView);
 

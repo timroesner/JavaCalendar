@@ -1,0 +1,4 @@
+CS 151 Class;2017;6;8;MW;09;11;
+Volunteer;2017;7;9;A;10;13;
+Study;2017;6;8;MWTF;15;18;
+NetFlix;2017;1;12;MWTF;18;19;

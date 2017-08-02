@@ -1,0 +1,223 @@
+package calendar;
+
+import java.time.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+import calendar.RecurringEventReader.Day;
+
+
+
+
+/**
+ *  @author Tim Roesner
+ *	@version 1.0
+ */
+public class Event implements Comparable<Event>{
+
+	public String title;
+	public LocalDate date;
+	public LocalTime startTime;
+	public LocalTime endTime;
+	public File f = new File("./events.txt");
+
+	/**
+	 * Event constructor 
+	 * @param title takes a String
+	 * @param date takes a LocalDate
+	 * @param startTime takes a LocalTime
+	 * @param endTime takes a LocalTime
+	 */
+	public Event(String title, LocalDate date, LocalTime startTime, LocalTime endTime) {
+		this.title = title;
+		this.date = date;
+		this.startTime = startTime;
+		if(!(endTime == null))
+			this.endTime = endTime;
+	}	
+
+	/**
+	 * No args constructor 
+	 */
+	public Event(){
+	}
+
+	/** 
+	 * Implements comparable interface from type Event
+	 * @param Event acts as that to compare to this
+	 * @return -1,0 or 1 depending if bigger, equal, or smaller respectively
+	 */
+	public int compareTo(Event event)
+	{
+		int dateCmp = this.date.compareTo(event.date);
+		if (dateCmp != 0) // if date not equal
+			return dateCmp; // return date comp
+		int startTimeCmp = this.startTime.compareTo(event.startTime);
+		if(startTimeCmp != 0) // if start time not equal
+			return startTimeCmp; // return start time comp
+		return this.title.compareTo(event.title); // if same date and same start time order by title
+	}
+
+	/**
+	 * implements comparable's equals method with the help of compareTo
+	 * @param Object takes AnyObject but then casts it as Event
+	 * @return true if this and m are equal false if not
+	 */
+	public boolean equals(Object e)
+	{
+		return this.compareTo((Event)e) == 0;
+	}
+
+	/**
+	 * loadEvents method used to load events from events.txt into memory
+	 * @return ArrayList of type Event
+	 */
+	public ArrayList<Event> loadEvents(){
+		ArrayList<Event> result = new ArrayList<>();
+		if(!(f.exists())){
+			System.out.println("File 'events.txt' does not exists. This is expected if you haven't saved any events yet.");
+			return null;
+		}
+		try{
+			// Chain or Readers
+			FileReader fr = new FileReader(f);
+			BufferedReader br = new BufferedReader(fr);
+			EventReader eventReader = new EventReader(br);
+
+			while(true){
+				Event e = eventReader.readEvent();
+				if(e==null)
+					break;
+				result.add(e);
+			}
+
+			br.close();
+			fr.close();
+		}
+		catch(IOException x)
+		{
+			System.out.println(x.getMessage());
+		}
+		System.out.println("Successfully loaded "+result.size()+" event(s).");
+		return result;
+	}
+
+	/**
+	 * saveEvents method which saves events from memory to events.txt
+	 * @param events takes ArrayList of type Event
+	 */
+	public void saveEvents(ArrayList<Event> events){
+		try
+		{
+			// Chain of writers.
+			FileWriter fw = new FileWriter(f);
+			PrintWriter pw = new PrintWriter(fw);
+			EventWriter eventWriter = new EventWriter(pw);
+
+			for (Event event : events){
+				eventWriter.writeEvent(event);
+			}
+			pw.close();
+			fw.close();
+		}
+		catch (IOException x)
+		{
+			System.out.println(x.getMessage());
+		}
+	}
+
+	public ArrayList<Event> createRecurringEvent(Event e, LocalDate startDate, LocalDate endDate, ArrayList<Day> weekDays,
+			LocalTime startTime, LocalTime endTime)
+	{
+		ArrayList<Event> recurringEvents = new ArrayList<>();
+
+		//iterate over all dates from the start date till the end date
+		for (LocalDate d = startDate; d.isBefore(endDate) || d.isEqual(endDate); d.plusDays(1))
+		{
+			//get the int value of the corresponding weekDay
+			int weekDayValueIterator = d.getDayOfWeek().getValue();
+			//if this int value is contained in the weekDays ArrayList
+			if (weekDays.contains(weekDayValueIterator))
+			{
+				//create new event
+				Event newEvent = new Event(e.getTitle(), d, startTime, endTime);
+				recurringEvents.add(newEvent);
+			}
+		}
+		return recurringEvents;
+
+	}
+	/**
+	 * getTitle method 
+	 * @return title of Event as String
+	 */
+	public String getTitle(){
+		return this.title;
+	}
+
+	/**
+	 * getDate method
+	 * @return date of Event as String
+	 */
+	public String getDate(){
+		int month = this.date.getMonthValue();
+		String zeroMonth = "";
+		if(month<10)
+			zeroMonth = "0";
+		int day = this.date.getDayOfMonth();
+		String zeroDay = "";
+		if(day<10)
+			zeroDay = "0";
+		int year = this.date.getYear();
+		return (zeroMonth+month+"/"+zeroDay+day+"/"+year);
+	}
+
+	/**
+	 * getStartTime method
+	 * @return start time of Event as String
+	 */
+	public String getStartTime(){
+		return this.startTime.toString();
+	}
+
+	/**
+	 * getEndTime method
+	 * @return end time of Event as String or "" if end time is null
+	 */
+	public String getEndTime(){
+		if(this.endTime == null){
+			return "";
+		}
+		return this.endTime.toString();
+	}
+
+	/**
+	 * hashCode method creates hash code for Event from title and start time
+	 */
+	public int hashCode()
+	{
+		return title.hashCode() + startTime.getHour();
+	}
+
+	/**
+	 * sort method sorts events ArrayList with help of a TreeSet
+	 */
+	public static void sort()
+	{
+		//return sorted ArrayList, sorted with help of a TreeSet
+		Calendar.events = new ArrayList<Event>(new TreeSet<Event>(Calendar.events));
+	}
+
+	public boolean conflicts(){
+		Boolean result = false;
+		for (Event event : Calendar.events){
+			if(event.date.equals(this.date)){
+				if(this.startTime.isBefore(event.endTime) && this.endTime.isAfter(event.startTime)){
+					result = true;
+				}
+			}
+		}
+		return result;
+	}
+}
