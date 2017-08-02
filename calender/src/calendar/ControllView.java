@@ -9,8 +9,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 public class ControllView extends JPanel implements ChangeListener {
 
 	private JLabel monthYear = new JLabel();
@@ -135,6 +133,7 @@ public class ControllView extends JPanel implements ChangeListener {
 				{
 					Calendar.events.add(event);
 				}
+				monthViewPanel.stateChanged(new ChangeEvent(this));
 			}
 		});
 		quit.addActionListener(new ActionListener() {
