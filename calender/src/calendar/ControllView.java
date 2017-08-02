@@ -9,8 +9,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 public class ControllView extends JPanel implements ChangeListener {
 
 	private JLabel monthYear = new JLabel();
@@ -35,8 +33,30 @@ public class ControllView extends JPanel implements ChangeListener {
 												// layed out in a grid
 		monthViewDays.setLayout(new GridLayout(7, 7));
 
-		monthYear.setText(month.monthYearString()); // "June 2017"
-		monthView.add(monthYear);
+		monthYear.setText(month.monthYearString());// "June 2017"
+		JPanel navLine = new JPanel();
+		navLine.setLayout(new BoxLayout(navLine, BoxLayout.X_AXIS));
+		JTextField leftArrow = new JTextField("<");
+		JTextField rightArrow = new JTextField(">");
+		leftArrow.setEditable(false);
+		rightArrow.setEditable(false);
+		leftArrow.setMaximumSize(new Dimension(22, 16));
+		rightArrow.setMaximumSize(new Dimension(22, 16));
+		
+		leftArrow.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				month.changeDate(month.date.minusMonths(1));
+			}
+		});
+		rightArrow.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				month.changeDate(month.date.plusMonths(1));
+			}
+		});
+		navLine.add(monthYear);
+		navLine.add(leftArrow);
+		navLine.add(rightArrow);
+		monthView.add(navLine);
 
 		String[] weekdays = month.weekdays(); // Localized weekdays in short
 												// format

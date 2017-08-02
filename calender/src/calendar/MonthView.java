@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import java.awt.*;
+import java.text.DateFormatSymbols;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,15 +93,15 @@ public class MonthView extends JPanel implements ChangeListener {
 		//create temporary calendar with DAY_OF_MONTH = 1 : the first day of the month
 		LocalDate temp = LocalDate.of(date.getYear(), date.getMonthValue(), 1);
 
-		List<String> weekDays = Arrays.asList("Sun", "Mon", "Tue",
-				"Wed", "Thu", "Fri", "Sat");
+		DateFormatSymbols symbols = new DateFormatSymbols(SimpleCalendar.language);
+		List<String> weekDays = Arrays.asList(symbols.getShortWeekdays());
 
 		JPanel weekDaysPanel = new JPanel();
 		weekDaysPanel.setLayout(new GridLayout(0, 7, 0, 0));
 		//add labels with weekdays to the panel
-		for (String s : weekDays)
+		for (int day=1; day<8;day++)
 		{
-			JLabel label = new JLabel(s);
+			JLabel label = new JLabel(weekDays.get(day));
 			label.setHorizontalAlignment(JLabel.CENTER);
 			label.setPreferredSize(new Dimension(10,30));
 			weekDaysPanel.add(label);
