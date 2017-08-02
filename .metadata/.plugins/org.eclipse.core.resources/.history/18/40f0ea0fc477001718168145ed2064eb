@@ -137,6 +137,12 @@ public class RecurringEventReader {
 		String startingTime = details[5] + ":00";
 		String endingTime = details[6] + ":00";
 
+		//in event class, add a method called loadRecurringEvents()
+		//for each line in the input.txt 
+		//create Recurring event
+		//schedule list of new events
+		//Day.values()
+
 		//specify the starting and ending period for the recurring event
 		LocalDate startingDate = LocalDate.of(year, startingMonth, 1);
 		//create a dummy variable with the first day of the ending month 
