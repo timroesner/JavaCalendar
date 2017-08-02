@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class ControllView extends JPanel implements ChangeListener {
 
 	private JLabel monthYear = new JLabel();
@@ -19,6 +21,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private DayViewPanel dayView = new DayViewPanel();
 	private WeekViewPanel weekViewPanel = new WeekViewPanel();
 	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
+	private AgendaViewPanel agendaView;
 	
 	public ControllView(Month month) {
 
@@ -134,6 +137,8 @@ public class ControllView extends JPanel implements ChangeListener {
 					Calendar.events.add(event);
 				}
 				monthViewPanel.stateChanged(new ChangeEvent(this));
+				dayView.update(month);
+				weekViewPanel.update(month);
 			}
 		});
 		quit.addActionListener(new ActionListener() {
@@ -151,6 +156,62 @@ public class ControllView extends JPanel implements ChangeListener {
 				monthViewPanel.stateChanged(new ChangeEvent(this));
 				rightView.revalidate();
 				rightView.repaint();
+			}
+		});
+		agendaPanelBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// pop out a new window for use to select dates
+				final JFrame frame = new JFrame();
+				JPanel panel = new JPanel();
+				panel.setLayout(new FlowLayout());
+			    // add buttons and textFiled to the pop out window 
+				JLabel start = new JLabel("Start Date:");
+				final JTextField startTxt = new JTextField("08/01/2017");
+				JLabel end = new JLabel("End Date:");
+				final JTextField endTxt = new JTextField("08/01/2017");
+				JButton cancel = new JButton("Cancel");
+				JButton ok = new JButton("OK");
+				//add actionListener to cancel button
+				cancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						frame.dispose();
+
+					}
+				});
+
+				//add actionListener to OK button
+				ok.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try { // update the month.startDate and month.endDate
+							SimpleCalendar.month.startDate = LocalDate.parse(startTxt.getText(), Calendar.formatter);
+							SimpleCalendar.month.endDate = LocalDate.parse(endTxt.getText(), Calendar.formatter);
+							// create new AgendaView
+							agendaView = new AgendaViewPanel(month);
+							rightView.removeAll();
+							rightView.add(navPanel);
+							rightView.add(agendaView);
+							rightView.revalidate();
+							rightView.repaint();
+							frame.dispose();
+						} catch (Exception e2) {
+							System.out.println("error");
+						};
+					}
+				});
+
+				panel.add(start);
+				panel.add(startTxt);
+				panel.add(end);
+				panel.add(endTxt);
+				panel.add(ok);
+				panel.add(cancel);
+
+				frame.add(panel);
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				frame.pack();
+				frame.setVisible(true);
 			}
 		});
 		navPanel.add(today);
