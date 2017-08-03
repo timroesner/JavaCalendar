@@ -46,7 +46,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
 		today = LocalDate.now();
 		gridPanel = new JPanel();
-
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		for (int i = 0; i < textPanes.length; i++)
@@ -70,7 +70,7 @@ public class MonthView extends JPanel implements ChangeListener {
 		createGridPanel(selectedDate);
 		this.add(gridPanel);
 		this.setPreferredSize(new Dimension(300,200));
-
+		
 		JScrollPane scrollPane = new JScrollPane(gridPanel);
 		scrollPane.setPreferredSize(new Dimension(800,200));
 		add(scrollPane);
@@ -117,8 +117,23 @@ public class MonthView extends JPanel implements ChangeListener {
 
 		for (Pane pane : textPanes)
 		{			
+//			if(!scheduler.hasEvents(LocalDate.of(selectedDate.getYear(), 
+//					selectedDate.getMonth(), Integer.parseInt(pane.getDayValueText().trim()))))
+//			{
+//				pane.setFlag(false);
+//			}
+
 			pane.removeAll();
 			pane.updateUI();
+			
+			
+//			//create dummy LocalDate variable from the pane's day value
+//			LocalDate dummy = LocalDate.of(date.getYear(), date.getMonthValue(), 
+//					Integer.parseInt(pane.getDayValueText().trim()));
+//			if (dummy.equals(today))
+//				pane.getDayValue().setBackground(Color.black);
+//			else
+//				pane.getDayValue().setBackground(null);
 			pane.insertComponent(pane.getDayValue());
 			gridPanel.add(pane);
 		}
@@ -133,7 +148,11 @@ public class MonthView extends JPanel implements ChangeListener {
 	{
 		//To keep track of events on that day
 		ArrayList<Event> events = new ArrayList<>();
-
+		
+		//TreeMap<LocalDate, TreeSet<CalendarEvent>> data = scheduler.getData();
+		//get a set of events on this date
+		//TreeSet<CalendarEvent> events = new TreeSet<>();
+		
 		//iterate over all the days in the month 
 		for (int i = 0; i < date.lengthOfMonth(); i++)
 		{
@@ -166,24 +185,14 @@ public class MonthView extends JPanel implements ChangeListener {
 				//if the pane's dayValue corresponds to the same monthDay as that of the event
 				if (dayValue == monthDay)
 				{
-					String text;
 					//append the event info to the text in the pane 
-					if (event.isHoliday)
-					{
-						text = pane.getText() + "\n" + event.getTitle();
-						pane.setForeground(Color.BLUE);
-					}
-					else
-					{
-						text = pane.getText() + "\n" + event.getTitle() + " " + 
-								event.getStartTime() + " - " + event.getEndTime();
-						pane.setForeground(Color.RED);
-					}
+					String text = pane.getText() + "\n" + event.getTitle() + " " + 
+					event.getStartTime() + " - " + event.getEndTime();
 					//clear the pane
 					pane.setText("");
 					//display the new updated pane
 					pane.setText(text);
-
+					pane.setForeground(Color.RED);
 					//pane.setBackground(Color.RED);
 					break;
 				}	
@@ -208,6 +217,9 @@ public class MonthView extends JPanel implements ChangeListener {
 		//if the selected date has any scheduled events, display them
 		if (!Calendar.events.isEmpty())
 			displayEvents(selectedDate);
+		
+//		if(!scheduler.getData().isEmpty())
+//			displayEvents(selectedDate);
 
 		//draw the day view
 		drawView();
@@ -222,51 +234,51 @@ public class MonthView extends JPanel implements ChangeListener {
 		return textPanes;
 	}
 
-	//	public static void main(String[] args)
-	//	{
-	//		Calendar c = new Calendar(new ArrayList<Event>());
-	//		//Month m = new Month(c.today);
-	//		//s.setSelectedDate(LocalDate.now());
-	//		MonthView mv = new MonthView(c);
-	//		JFrame frame = new JFrame();
-	//		frame.setSize(800, 800);
-	//		frame.setLayout(new BorderLayout());
-	//
-	//		c.attach(mv);
-	//		//m.attach(mv);
-	//		//mv.drawView();
-	//		
-	//		LocalDate d1 = LocalDate.of(2017, 8, 26);
-	//		LocalDate d2 = LocalDate.of(2017, 8, 29);
-	//		LocalDate d3 = LocalDate.of(2017, 8, 30);
-	//		LocalDate d4 = LocalDate.of(2017, 8, 2);
-	//
-	//		LocalTime s1 = LocalTime.of(12, 00);
-	//		LocalTime f1 = LocalTime.of(13, 00);
-	//		LocalTime s2 = LocalTime.of(12, 00);
-	//		LocalTime f2 = LocalTime.of(13, 00);
-	//		LocalTime s3 = LocalTime.of(12, 00);
-	//		LocalTime f3 = LocalTime.of(13, 00);
-	//
-	//		Event e = new Event("Test Event", d1 , s1, f1);
-	//		Event e2 = new Event("Test Event", d2, s2, f2);
-	//		Event e3 = new Event("Test Event", d3, s3, f3);
-	//		Event e4 = new Event("Test Event", d4, s3, f3);
-	//
-	//		c.add(e);
-	//		c.add(e2);
-	//		c.add(e3);
-	//		c.add(e4);
-	////		for (Pane p : mv.getTextPanes())
-	////		{
-	////			System.out.println(p.getText());
-	////		}
-	//		//mv.drawView();
-	//		
-	//		frame.add(mv, BorderLayout.EAST);
-	//		frame.setVisible(true);
-	//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//		//frame.pack();
-	//	}
+//	public static void main(String[] args)
+//	{
+//		Calendar c = new Calendar(new ArrayList<Event>());
+//		//Month m = new Month(c.today);
+//		//s.setSelectedDate(LocalDate.now());
+//		MonthView mv = new MonthView(c);
+//		JFrame frame = new JFrame();
+//		frame.setSize(800, 800);
+//		frame.setLayout(new BorderLayout());
+//
+//		c.attach(mv);
+//		//m.attach(mv);
+//		//mv.drawView();
+//		
+//		LocalDate d1 = LocalDate.of(2017, 8, 26);
+//		LocalDate d2 = LocalDate.of(2017, 8, 29);
+//		LocalDate d3 = LocalDate.of(2017, 8, 30);
+//		LocalDate d4 = LocalDate.of(2017, 8, 2);
+//
+//		LocalTime s1 = LocalTime.of(12, 00);
+//		LocalTime f1 = LocalTime.of(13, 00);
+//		LocalTime s2 = LocalTime.of(12, 00);
+//		LocalTime f2 = LocalTime.of(13, 00);
+//		LocalTime s3 = LocalTime.of(12, 00);
+//		LocalTime f3 = LocalTime.of(13, 00);
+//
+//		Event e = new Event("Test Event", d1 , s1, f1);
+//		Event e2 = new Event("Test Event", d2, s2, f2);
+//		Event e3 = new Event("Test Event", d3, s3, f3);
+//		Event e4 = new Event("Test Event", d4, s3, f3);
+//
+//		c.add(e);
+//		c.add(e2);
+//		c.add(e3);
+//		c.add(e4);
+////		for (Pane p : mv.getTextPanes())
+////		{
+////			System.out.println(p.getText());
+////		}
+//		//mv.drawView();
+//		
+//		frame.add(mv, BorderLayout.EAST);
+//		frame.setVisible(true);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		//frame.pack();
+//	}
 
 }

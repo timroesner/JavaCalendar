@@ -369,10 +369,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		return dates.get(index);
 	}
 
-	/**
-	 * Changes the holiday-reading strategy.
-	 * @param readingStrategy the new strategy
-	 */
+	// Set Strategy
 	public void setStrategy(HolidayReader readingStrategy) {
 		this.holidayStrategy = readingStrategy;
 	}

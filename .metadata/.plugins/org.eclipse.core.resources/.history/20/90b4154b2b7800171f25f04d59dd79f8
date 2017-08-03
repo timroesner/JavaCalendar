@@ -249,7 +249,6 @@ public class ControllView extends JPanel implements ChangeListener {
 		holidaySelection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				//show dialogue 
 				promptInputBox();
 			}
 		});
@@ -270,33 +269,25 @@ public class ControllView extends JPanel implements ChangeListener {
 		add(rightView);
 	}
 
-	/**
-	 * Displays new JFrame for the user to select the country of preference.
-	 * There are two options for the country: USA and Canada.
-	 */
 	public void promptInputBox()
 	{
-		//create new frame
 		JFrame dialogueFrame = new JFrame();
 		dialogueFrame.setLayout(new BorderLayout());
 		dialogueFrame.setSize(300, 100);
-		//panel containing country buttons
 		JPanel btnPanel = new JPanel();
 
-		//add label containing helping message
 		JLabel label = new JLabel("Select country to load its holidays");
 		label.setHorizontalAlignment(JLabel.CENTER);
-		//create two buttons for the countries
 		JButton usa = new JButton("USA");
 		JButton canada = new JButton("Canada");
-		//add buttons to the button panel
+
 		btnPanel.add(usa);
 		btnPanel.add(canada);
-		//add label and button panel to the frame
+
 		dialogueFrame.add(label, BorderLayout.NORTH);
 		dialogueFrame.add(btnPanel, BorderLayout.CENTER);
 
-		//attach an actionListener to the USA button
+
 		usa.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -304,21 +295,14 @@ public class ControllView extends JPanel implements ChangeListener {
 					setStrategy(new USAHolidayReader());
 					//read holidays and store them into an ArrayList
 					usaHolidays = holidayStrategy.readHolidays();
-					
-					//check if the ArrayList canadaHolidays has events
-					//if so, remove all the Canadian holidays from calendar
 					if (!canadaHolidays.isEmpty())
 						Calendar.events.removeAll(canadaHolidays);
-					
-					//add holidays to calendar
-					//iterate over entire ArrayList instead of using the addAll() method
+					//iterating over entire ArrayList instead of using the addAll() method
 					//because the views are only notified when the Calendar.add() method is invoked
 					for (Event event : usaHolidays)
 					{
 						Calendar.events.add(event);
 					}
-					
-					//update views 
 					monthViewPanel.stateChanged(new ChangeEvent(this));
 					dayView.update(month);
 					weekViewPanel.update(month);
@@ -328,7 +312,6 @@ public class ControllView extends JPanel implements ChangeListener {
 				}
 			}
 		});
-		//attach an actionListener to the Canada button
 		canada.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -336,20 +319,14 @@ public class ControllView extends JPanel implements ChangeListener {
 					setStrategy(new CanadaHolidayReader());
 					//read holidays and store them into an ArrayList
 					canadaHolidays = holidayStrategy.readHolidays();
-					
-					//check if the ArrayList usaHolidays has events
-					//if so, remove all the American holidays from calendar
 					if (!usaHolidays.isEmpty())
 						Calendar.events.removeAll(usaHolidays);
-					
-					//iterate over entire ArrayList instead of using the addAll() method
+					//iterating over entire ArrayList instead of using the addAll() method
 					//because the views are only notified when the Calendar.add() method is invoked
 					for (Event event : canadaHolidays)
 					{
 						Calendar.events.add(event);
 					}
-					
-					//update views
 					monthViewPanel.stateChanged(new ChangeEvent(this));
 					dayView.update(month);
 					weekViewPanel.update(month);
@@ -363,16 +340,11 @@ public class ControllView extends JPanel implements ChangeListener {
 		dialogueFrame.setVisible(true);
 		dialogueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
-	
-	
 	public LocalDate getDateOfLbl(int index) {
 		return dates.get(index);
 	}
 
-	/**
-	 * Changes the holiday-reading strategy.
-	 * @param readingStrategy the new strategy
-	 */
+	// Set Strategy
 	public void setStrategy(HolidayReader readingStrategy) {
 		this.holidayStrategy = readingStrategy;
 	}

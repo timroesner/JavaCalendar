@@ -46,7 +46,7 @@ public class Event implements Comparable<Event>{
 		this.title = title;
 		this.date = date;
 		this.startTime = LocalTime.parse("00:00");
-		this.endTime = LocalTime.parse("23:00");
+		this.endTime = LocalTime.parse("00:00");
 		this.isHoliday = true;
 	}
 

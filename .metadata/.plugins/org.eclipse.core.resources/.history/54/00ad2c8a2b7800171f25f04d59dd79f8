@@ -319,9 +319,9 @@ public class ControllView extends JPanel implements ChangeListener {
 					}
 					
 					//update views 
-					monthViewPanel.stateChanged(new ChangeEvent(this));
-					dayView.update(month);
-					weekViewPanel.update(month);
+//					monthViewPanel.stateChanged(new ChangeEvent(this));
+//					dayView.update(month);
+//					weekViewPanel.update(month);
 					dialogueFrame.dispose();
 				} catch (IOException e1) {
 					System.out.println(e1.getMessage());
@@ -350,9 +350,9 @@ public class ControllView extends JPanel implements ChangeListener {
 					}
 					
 					//update views
-					monthViewPanel.stateChanged(new ChangeEvent(this));
-					dayView.update(month);
-					weekViewPanel.update(month);
+//					monthViewPanel.stateChanged(new ChangeEvent(this));
+//					dayView.update(month);
+//					weekViewPanel.update(month);
 					dialogueFrame.dispose();
 				} catch (IOException e1) {
 					System.out.println(e1.getMessage());
@@ -363,16 +363,11 @@ public class ControllView extends JPanel implements ChangeListener {
 		dialogueFrame.setVisible(true);
 		dialogueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
-	
-	
 	public LocalDate getDateOfLbl(int index) {
 		return dates.get(index);
 	}
 
-	/**
-	 * Changes the holiday-reading strategy.
-	 * @param readingStrategy the new strategy
-	 */
+	// Set Strategy
 	public void setStrategy(HolidayReader readingStrategy) {
 		this.holidayStrategy = readingStrategy;
 	}

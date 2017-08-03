@@ -209,6 +209,9 @@ public class MonthView extends JPanel implements ChangeListener {
 		if (!Calendar.events.isEmpty())
 			displayEvents(selectedDate);
 
+		//		if(!scheduler.getData().isEmpty())
+		//			displayEvents(selectedDate);
+
 		//draw the day view
 		drawView();
 	}
