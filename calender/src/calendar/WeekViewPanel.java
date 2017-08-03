@@ -32,7 +32,7 @@ public class WeekViewPanel extends JPanel {
 			week.add(create(weekday));
 		}
 		JScrollPane scrollPane = new JScrollPane(week);
-		scrollPane.setPreferredSize(new Dimension(800, 200));
+		scrollPane.setPreferredSize(new Dimension(950, 200));
 		add(scrollPane);
 	}
 
