@@ -38,6 +38,7 @@ public class CreateView extends JFrame {
         // Add Save action, check for conflict and save to Event model
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
 				String titleString = title.getText();
 				LocalDate date = LocalDate.parse(dateTxt.getText(), Calendar.formatter);
 				LocalTime startTime = LocalTime.parse(start.getText());
@@ -49,7 +50,10 @@ public class CreateView extends JFrame {
 					SimpleCalendar.calendar.add(newEvent);
 					dispose();
 				}
-			}
+				}catch (Exception e1) {
+					System.out.println("error");
+				};
+			}		
 		});
         
         // Adust month to two chracters
