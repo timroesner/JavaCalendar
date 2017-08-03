@@ -26,6 +26,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private HolidayReader holidayStrategy;
 	private ArrayList<Event> usaHolidays;
 	private ArrayList<Event> canadaHolidays;
+	private int currentView = 1 ; 
 
 	public ControllView(Month month) {
 
@@ -122,12 +123,22 @@ public class ControllView extends JPanel implements ChangeListener {
 		JButton quit = new JButton("Quit");
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				month.changeDate(month.date.minusDays(1));
+				if (currentView == 1)
+				    month.changeDate(month.date.minusDays(1));
+				else if (currentView ==2)
+				    month.changeDate(month.date.minusWeeks(1));
+				else 
+					month.changeDate(month.date.minusMonths(1));
 			}
 		});
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				month.changeDate(month.date.plusDays(1));
+				if (currentView == 1)
+				    month.changeDate(month.date.plusDays(1));
+				else if (currentView ==2)
+				    month.changeDate(month.date.plusWeeks(1));
+				else 
+					month.changeDate(month.date.plusMonths(1));
 			}
 		});
 		create.addActionListener(new ActionListener() {
@@ -147,6 +158,7 @@ public class ControllView extends JPanel implements ChangeListener {
 				rightView.add(dayView);
 				rightView.revalidate();
 				rightView.repaint();
+				currentView = 1 ;
 			}
 		});
 		weekPanelBtn.addActionListener(new ActionListener() {
@@ -156,6 +168,7 @@ public class ControllView extends JPanel implements ChangeListener {
 				rightView.add(weekViewPanel);
 				rightView.revalidate();
 				rightView.repaint();
+				currentView = 2 ;
 			}
 		});
 		fromFile.addActionListener(new ActionListener() {
@@ -187,6 +200,7 @@ public class ControllView extends JPanel implements ChangeListener {
 				monthViewPanel.stateChanged(new ChangeEvent(this));
 				rightView.revalidate();
 				rightView.repaint();
+				currentView = 3 ;
 			}
 		});
 		agendaPanelBtn.addActionListener(new ActionListener() {
