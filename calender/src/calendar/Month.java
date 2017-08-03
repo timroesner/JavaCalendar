@@ -19,12 +19,12 @@ public class Month {
 	public LocalDate date;
 	private ArrayList<ChangeListener> listeners;
 	public LocalDate startDate;
-	public LocalDate endDate;
+    public LocalDate endDate;
 
 	public Month(LocalDate date) {
 		this.date = date;
 		this.startDate = date ;
-		this.endDate = date ;
+	    this.endDate = date ;
 		listeners = new ArrayList<ChangeListener>();
 	}
 

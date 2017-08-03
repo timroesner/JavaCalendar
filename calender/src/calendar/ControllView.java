@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+
+
 public class ControllView extends JPanel implements ChangeListener {
 
 	private JLabel monthYear = new JLabel();
@@ -19,7 +21,8 @@ public class ControllView extends JPanel implements ChangeListener {
 	private DayViewPanel dayView = new DayViewPanel();
 	private WeekViewPanel weekViewPanel = new WeekViewPanel();
 	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
-	private AgendaViewPanel agendaView;
+
+	private AgendaViewPanel agendaView = new AgendaViewPanel();
 	
 	public ControllView(Month month) {
 
@@ -32,6 +35,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		JPanel monthViewDays = new JPanel(); // Just the days and weekday labels
 												// layed out in a grid
 		monthViewDays.setLayout(new GridLayout(7, 7));
+
 
 		monthYear.setText(month.monthYearString());// "June 2017"
 		JPanel navLine = new JPanel();
@@ -57,7 +61,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		navLine.add(leftArrow);
 		navLine.add(rightArrow);
 		monthView.add(navLine);
-
+        
 		String[] weekdays = month.weekdays(); // Localized weekdays in short
 												// format
 
@@ -208,7 +212,8 @@ public class ControllView extends JPanel implements ChangeListener {
 							SimpleCalendar.month.startDate = LocalDate.parse(startTxt.getText(), Calendar.formatter);
 							SimpleCalendar.month.endDate = LocalDate.parse(endTxt.getText(), Calendar.formatter);
 							// create new AgendaView
-							agendaView = new AgendaViewPanel(month);
+
+							agendaView.update(month);
 							rightView.removeAll();
 							rightView.add(navPanel);
 							rightView.add(agendaView);
@@ -259,6 +264,8 @@ public class ControllView extends JPanel implements ChangeListener {
 		dayView.update(month);
 		weekViewPanel.update(month);
 		monthViewPanel.stateChanged(new ChangeEvent(this));
+
+		agendaView.update(month);
 		//monthViewPanel.update(month);
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
