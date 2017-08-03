@@ -9,8 +9,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import calendar.Event;
-import calendar.Month;
+
 
 public class ControllView extends JPanel implements ChangeListener {
 
@@ -35,9 +34,27 @@ public class ControllView extends JPanel implements ChangeListener {
 		JPanel monthViewDays = new JPanel(); // Just the days and weekday labels
 												// layed out in a grid
 		monthViewDays.setLayout(new GridLayout(7, 7));
-
+		
+		JButton monthLeft = new JButton("<");
+		JButton monthRight = new JButton(">");
+		JPanel navigateMonth = new JPanel();	
 		monthYear.setText(month.monthYearString()); // "June 2017"
-		monthView.add(monthYear);
+		navigateMonth.add(monthLeft);
+		navigateMonth.add(monthYear);	
+		navigateMonth.add(monthRight);
+		monthView.add(navigateMonth);
+		
+		// two buttons to navigate month
+		monthLeft.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				month.changeDate(month.date.plusMonths(-1));
+			}
+		});
+		monthRight.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				month.changeDate(month.date.plusMonths(1));
+			}
+		});	
 
 		String[] weekdays = month.weekdays(); // Localized weekdays in short
 												// format
