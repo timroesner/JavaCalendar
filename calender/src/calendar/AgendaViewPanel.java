@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class AgendaViewPanel extends JPanel {
+
 	
 	private static ArrayList<Event> eventsOnAgenda = new ArrayList<>();
 	String agenda ;
@@ -16,9 +17,12 @@ public class AgendaViewPanel extends JPanel {
 
 	public AgendaViewPanel() {
 
+
 		// creating the AgendaViewPanel
 		JPanel panel = new JPanel();
 		agendaDetail = new JTextArea(); // where the agenda is displayed
+
+
 		agenda = ""; // the string to save all the events
 		agendaDetail.setText(agenda);
 		panel.add(agendaDetail);
@@ -51,6 +55,7 @@ public class AgendaViewPanel extends JPanel {
 		}
 		
 		if (eventsOnAgenda.size() == 0) agenda += "no events for selected period";
+
 		agendaDetail.setText(agenda);
 	}
 

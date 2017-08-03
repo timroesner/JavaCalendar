@@ -1,0 +1,8 @@
+package calendar;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+public interface HolidayReader {
+	ArrayList<Event> readHolidays() throws IOException;
+}

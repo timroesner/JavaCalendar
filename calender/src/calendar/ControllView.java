@@ -21,6 +21,8 @@ public class ControllView extends JPanel implements ChangeListener {
 	private DayViewPanel dayView = new DayViewPanel();
 	private WeekViewPanel weekViewPanel = new WeekViewPanel();
 	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
+
+
 	private AgendaViewPanel agendaView = new AgendaViewPanel();
 	
 	public ControllView(Month month) {
@@ -34,28 +36,33 @@ public class ControllView extends JPanel implements ChangeListener {
 		JPanel monthViewDays = new JPanel(); // Just the days and weekday labels
 												// layed out in a grid
 		monthViewDays.setLayout(new GridLayout(7, 7));
+
+
+		monthYear.setText(month.monthYearString());// "June 2017"
+		JPanel navLine = new JPanel();
+		navLine.setLayout(new BoxLayout(navLine, BoxLayout.X_AXIS));
+		JTextField leftArrow = new JTextField("<");
+		JTextField rightArrow = new JTextField(">");
+		leftArrow.setEditable(false);
+		rightArrow.setEditable(false);
+		leftArrow.setMaximumSize(new Dimension(22, 16));
+		rightArrow.setMaximumSize(new Dimension(22, 16));
 		
-		JButton monthLeft = new JButton("<");
-		JButton monthRight = new JButton(">");
-		JPanel navigateMonth = new JPanel();	
-		monthYear.setText(month.monthYearString()); // "June 2017"
-		navigateMonth.add(monthLeft);
-		navigateMonth.add(monthYear);	
-		navigateMonth.add(monthRight);
-		monthView.add(navigateMonth);
-		
-		// two buttons to navigate month
-		monthLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				month.changeDate(month.date.plusMonths(-1));
+		leftArrow.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				month.changeDate(month.date.minusMonths(1));
 			}
 		});
-		monthRight.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		rightArrow.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
 				month.changeDate(month.date.plusMonths(1));
 			}
-		});	
-
+		});
+		navLine.add(monthYear);
+		navLine.add(leftArrow);
+		navLine.add(rightArrow);
+		monthView.add(navLine);
+        
 		String[] weekdays = month.weekdays(); // Localized weekdays in short
 												// format
 
@@ -206,6 +213,7 @@ public class ControllView extends JPanel implements ChangeListener {
 							SimpleCalendar.month.startDate = LocalDate.parse(startTxt.getText(), Calendar.formatter);
 							SimpleCalendar.month.endDate = LocalDate.parse(endTxt.getText(), Calendar.formatter);
 							// create new AgendaView
+
 							agendaView.update(month);
 							rightView.removeAll();
 							rightView.add(navPanel);
@@ -257,6 +265,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		dayView.update(month);
 		weekViewPanel.update(month);
 		monthViewPanel.stateChanged(new ChangeEvent(this));
+
 		agendaView.update(month);
 		//monthViewPanel.update(month);
 		int j = 0;

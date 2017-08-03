@@ -1,0 +1,13 @@
+package calendar;
+
+import java.util.ArrayList;
+
+public class USAHolidayReader implements HolidayReader {
+
+	@Override
+	public ArrayList<Event> readHolidays() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

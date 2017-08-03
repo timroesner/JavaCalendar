@@ -11,13 +11,14 @@ import java.util.TreeSet;
  *	@version 1.0
  */
 public class Event implements Comparable<Event>{
-	
+
 	public String title;
 	public LocalDate date;
 	public LocalTime startTime;
 	public LocalTime endTime;
 	public File f = new File("./events.txt");
-	
+	public File recurringEventFile = new File("./input.txt");
+
 	/**
 	 * Event constructor 
 	 * @param title takes a String
@@ -34,11 +35,24 @@ public class Event implements Comparable<Event>{
 	}	
 	
 	/**
+	 * All-day holiday Event constructor 
+	 * @param title takes a String
+	 * @param date takes a LocalDate
+	 */
+	public Event(String title, LocalDate date)
+	{
+		this.title = title;
+		this.date = date;
+		this.startTime = LocalTime.parse("00:00");
+		this.endTime = LocalTime.parse("23:00");
+	}
+
+	/**
 	 * No args constructor 
 	 */
 	public Event(){
 	}
-	
+
 	/** 
 	 * Implements comparable interface from type Event
 	 * @param Event acts as that to compare to this
@@ -54,7 +68,7 @@ public class Event implements Comparable<Event>{
 			return startTimeCmp; // return start time comp
 		return this.title.compareTo(event.title); // if same date and same start time order by title
 	}
-		
+
 	/**
 	 * implements comparable's equals method with the help of compareTo
 	 * @param Object takes AnyObject but then casts it as Event
@@ -64,7 +78,45 @@ public class Event implements Comparable<Event>{
 	{
 		return this.compareTo((Event)e) == 0;
 	}
-	
+
+	/**
+	 * Loads "input.txt" to populate the calendar with recurring events.
+	 * @return ArrayList of Events
+	 */
+	public ArrayList<Event> loadRecurringEvents()
+	{
+		ArrayList<Event> result = new ArrayList<>();
+		if (!(recurringEventFile.exists()))
+		{
+			System.out.println("File 'input.txt' does not exist");
+			return null;
+		}
+
+		try {
+			//build chain of readers
+			FileReader fr = new FileReader(recurringEventFile);
+			BufferedReader br = new BufferedReader(fr);
+			RecurringEventReader er = new RecurringEventReader(br);
+
+			//create new ArrayList of events
+			ArrayList<Event> recurringEvents = new ArrayList<>();
+			//read ArrayList of recurring events and check if it's null
+			while ((recurringEvents = er.readEvent()) != null)	
+			{
+				//add all instances of the recurring event to result
+				result.addAll(recurringEvents);
+			}
+			//close chain of readers
+			br.close();
+			fr.close();
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return result;
+	}
+
 	/**
 	 * loadEvents method used to load events from events.txt into memory
 	 * @return ArrayList of type Event
@@ -80,14 +132,14 @@ public class Event implements Comparable<Event>{
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 			EventReader eventReader = new EventReader(br);
-			
+
 			while(true){
 				Event e = eventReader.readEvent();
 				if(e==null)
 					break;
 				result.add(e);
 			}
-			
+
 			br.close();
 			fr.close();
 		}
@@ -98,7 +150,7 @@ public class Event implements Comparable<Event>{
 		System.out.println("Successfully loaded "+result.size()+" event(s).");
 		return result;
 	}
-	
+
 	/**
 	 * saveEvents method which saves events from memory to events.txt
 	 * @param events takes ArrayList of type Event
@@ -110,7 +162,7 @@ public class Event implements Comparable<Event>{
 			FileWriter fw = new FileWriter(f);
 			PrintWriter pw = new PrintWriter(fw);
 			EventWriter eventWriter = new EventWriter(pw);
-			
+
 			for (Event event : events){
 				eventWriter.writeEvent(event);
 			}
@@ -122,7 +174,8 @@ public class Event implements Comparable<Event>{
 			System.out.println(x.getMessage());
 		}
 	}
-	
+
+
 	/**
 	 * getTitle method 
 	 * @return title of Event as String
@@ -130,7 +183,7 @@ public class Event implements Comparable<Event>{
 	public String getTitle(){
 		return this.title;
 	}
-	
+
 	/**
 	 * getDate method
 	 * @return date of Event as String
@@ -147,7 +200,7 @@ public class Event implements Comparable<Event>{
 		int year = this.date.getYear();
 		return (zeroMonth+month+"/"+zeroDay+day+"/"+year);
 	}
-	
+
 	/**
 	 * getStartTime method
 	 * @return start time of Event as String
@@ -155,7 +208,7 @@ public class Event implements Comparable<Event>{
 	public String getStartTime(){
 		return this.startTime.toString();
 	}
-	
+
 	/**
 	 * getEndTime method
 	 * @return end time of Event as String or "" if end time is null
@@ -166,7 +219,7 @@ public class Event implements Comparable<Event>{
 		}
 		return this.endTime.toString();
 	}
-	
+
 	/**
 	 * hashCode method creates hash code for Event from title and start time
 	 */
@@ -174,7 +227,7 @@ public class Event implements Comparable<Event>{
 	{
 		return title.hashCode() + startTime.getHour();
 	}
-	
+
 	/**
 	 * sort method sorts events ArrayList with help of a TreeSet
 	 */
@@ -183,7 +236,7 @@ public class Event implements Comparable<Event>{
 		//return sorted ArrayList, sorted with help of a TreeSet
 		Calendar.events = new ArrayList<Event>(new TreeSet<Event>(Calendar.events));
 	}
-	
+
 	public boolean conflicts(){
 		Boolean result = false;
 		for (Event event : Calendar.events){
@@ -194,5 +247,28 @@ public class Event implements Comparable<Event>{
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Returns a String representation of the event in the following format: 
+	 * Title Date startingTime - EndingTime
+	 * Example: Test Event 08/01/2017 12:00 - 14:00
+	 * @return the String representation
+	 */
+	public String toString()
+	{
+		return getTitle() + " " + getDate() + " " + getStartTime()
+		+ "-" + getEndTime();
+	}
+	
+	/**
+	 * Returns a String representation of a holiday event in the following format:
+	 * Title Date
+	 * Example: Test Event 08/01/2017 
+	 * @return the String representation
+	 */
+	public String holidayToString()
+	{
+		return getTitle() + " " + getDate();
 	}
 }

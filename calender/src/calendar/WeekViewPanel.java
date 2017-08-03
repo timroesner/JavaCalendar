@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -16,6 +17,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import com.sun.org.apache.bcel.internal.generic.DASTORE;
+
+import sun.java2d.pipe.SpanShapeRenderer.Simple;
 
 public class WeekViewPanel extends JPanel {
 
@@ -51,7 +54,7 @@ public class WeekViewPanel extends JPanel {
 			}
 		}
 
-		JLabel weekdayName = new JLabel(date.getDayOfWeek().toString());
+		JLabel weekdayName = new JLabel(date.getDayOfWeek().getDisplayName(TextStyle.FULL, SimpleCalendar.language));
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 2;
