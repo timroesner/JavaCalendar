@@ -22,6 +22,7 @@ public class ControllView extends JPanel implements ChangeListener {
 	private WeekViewPanel weekViewPanel = new WeekViewPanel();
 	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
 
+
 	private AgendaViewPanel agendaView = new AgendaViewPanel();
 	
 	public ControllView(Month month) {

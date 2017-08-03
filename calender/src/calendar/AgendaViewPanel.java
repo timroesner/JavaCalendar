@@ -22,6 +22,7 @@ public class AgendaViewPanel extends JPanel {
 		JPanel panel = new JPanel();
 		agendaDetail = new JTextArea(); // where the agenda is displayed
 
+
 		agenda = ""; // the string to save all the events
 		agendaDetail.setText(agenda);
 		panel.add(agendaDetail);
