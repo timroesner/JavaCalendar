@@ -261,12 +261,6 @@ public class Event implements Comparable<Event>{
 		+ "-" + getEndTime();
 	}
 	
-	/**
-	 * Returns a String representation of a holiday event in the following format:
-	 * Title Date
-	 * Example: Test Event 08/01/2017 
-	 * @return the String representation
-	 */
 	public String holidayToString()
 	{
 		return getTitle() + " " + getDate();
