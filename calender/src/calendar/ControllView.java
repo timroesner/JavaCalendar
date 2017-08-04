@@ -66,15 +66,17 @@ public class ControllView extends JPanel implements ChangeListener {
 		rightArrow.setEditable(false);
 		leftArrow.setMaximumSize(new Dimension(22, 16));
 		rightArrow.setMaximumSize(new Dimension(22, 16));
-
+		Month seperateMonth = new Month(month.date);
 		leftArrow.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				month.changeDate(month.date.minusMonths(1));
+				seperateMonth.changeDate(seperateMonth.date.minusMonths(1));
+				updateMonth(seperateMonth);
 			}
 		});
 		rightArrow.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				month.changeDate(month.date.plusMonths(1));
+				seperateMonth.changeDate(seperateMonth.date.plusMonths(1));
+				updateMonth(seperateMonth);
 			}
 		});
 		navLine.add(monthYear);
@@ -478,6 +480,17 @@ public class ControllView extends JPanel implements ChangeListener {
 	public void setStrategy(HolidayReader readingStrategy) {
 		this.holidayStrategy = readingStrategy;
 	}
+	
+	public void updateMonth(Month m){
+		int j = 0;
+		monthYear.setText(m.monthYearString());
+		for (LocalDate newDate : m.getDateArray()) {
+			JTextField label = labels.get(j);
+			label.setText(String.valueOf(newDate.getDayOfMonth()));
+			label.setBackground(Color.white);
+			j++;
+		}
+	}
 
 
 	/* (non-Javadoc)
@@ -487,9 +500,8 @@ public class ControllView extends JPanel implements ChangeListener {
 		dayView.update(month);
 		weekViewPanel.update(month);
 		monthViewPanel.stateChanged(new ChangeEvent(this));
-
 		agendaView.update(month);
-		//monthViewPanel.update(month);
+
 		int j = 0;
 		monthYear.setText(this.month.monthYearString());
 		dates.clear();
