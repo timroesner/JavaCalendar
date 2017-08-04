@@ -30,24 +30,18 @@ public class MonthView extends JPanel implements ChangeListener {
 	{
 		calendar = c;
 		selectedDate = SimpleCalendar.month.getSelectedDate();
-		initializePanes();
-		gridPanel = new JPanel();
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	}
-
-	/**
-	 * Changes the number of panes in the grid according to the currently selected month.
-	 */
-	private void initializePanes()
-	{
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
+		gridPanel = new JPanel();
+
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
 		for (int i = 0; i < textPanes.length; i++)
 		{
 			textPanes[i] = new Pane();
 			textPanes[i].setDayValue(" " + Integer.toString(i+1));
 		}
 	}
-	
+
 	/**
 	 * Draws the drawView object.
 	 */
@@ -130,10 +124,13 @@ public class MonthView extends JPanel implements ChangeListener {
 	 */
 	private void displayEvents(LocalDate date)
 	{
-		//change the number of the panes according to the currently selected month
 		Arrays.fill(textPanes, null);
-		initializePanes();
-		
+		textPanes = new Pane[selectedDate.lengthOfMonth()];
+		for (int i = 0; i < textPanes.length; i++)
+		{
+			textPanes[i] = new Pane();
+			textPanes[i].setDayValue(" " + Integer.toString(i+1));
+		}
 		//To keep track of events on that day
 		ArrayList<Event> events = new ArrayList<>();
 

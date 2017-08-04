@@ -130,7 +130,7 @@ public class MonthView extends JPanel implements ChangeListener {
 	 */
 	private void displayEvents(LocalDate date)
 	{
-		//change the number of the panes according to the currently selected month
+		//change the size of the panes according to the currently selected month
 		Arrays.fill(textPanes, null);
 		initializePanes();
 		

@@ -35,9 +35,6 @@ public class MonthView extends JPanel implements ChangeListener {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	}
 
-	/**
-	 * Changes the number of panes in the grid according to the currently selected month.
-	 */
 	private void initializePanes()
 	{
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
@@ -130,7 +127,6 @@ public class MonthView extends JPanel implements ChangeListener {
 	 */
 	private void displayEvents(LocalDate date)
 	{
-		//change the number of the panes according to the currently selected month
 		Arrays.fill(textPanes, null);
 		initializePanes();
 		
@@ -174,7 +170,10 @@ public class MonthView extends JPanel implements ChangeListener {
 					if (event.isHoliday)
 					{
 						text = pane.getText() + "\n" + event.getTitle();
-						pane.setForeground(Color.BLUE);
+						JLabel label = new JLabel(text);
+						label.setForeground(Color.BLUE);
+						pane.insertComponent(label);
+						//pane.setForeground(Color.BLUE);
 					}
 					else
 					{

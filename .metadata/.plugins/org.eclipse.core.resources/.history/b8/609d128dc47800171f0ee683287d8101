@@ -30,24 +30,18 @@ public class MonthView extends JPanel implements ChangeListener {
 	{
 		calendar = c;
 		selectedDate = SimpleCalendar.month.getSelectedDate();
-		initializePanes();
-		gridPanel = new JPanel();
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	}
-
-	/**
-	 * Changes the number of panes in the grid according to the currently selected month.
-	 */
-	private void initializePanes()
-	{
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
+		gridPanel = new JPanel();
+
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
 		for (int i = 0; i < textPanes.length; i++)
 		{
 			textPanes[i] = new Pane();
 			textPanes[i].setDayValue(" " + Integer.toString(i+1));
 		}
 	}
-	
+
 	/**
 	 * Draws the drawView object.
 	 */
@@ -111,11 +105,10 @@ public class MonthView extends JPanel implements ChangeListener {
 		{			
 			pane.removeAll();
 			pane.updateUI();
-			//keep track of 'today' in the month view
 			LocalDate today = LocalDate.now();
-			LocalDate dummy = LocalDate.of(today.getYear(), today.getMonth().getValue(), Integer.parseInt(pane.getDayValueText().trim()));
-			if (dummy.equals(selectedDate))
-				pane.getDayValue().setForeground(Color.blue);
+			LocalDate dummy = LocalDate.of(today.getYear(), today.getMonth(), Integer.parseInt(pane.getDayValueText().trim()));
+			if (dummy.equals(today))
+				pane.getDayValue().setForeground(Color.GREEN);
 			else
 				pane.getDayValue().setForeground(Color.black);
 			pane.insertComponent(pane.getDayValue());
@@ -130,10 +123,6 @@ public class MonthView extends JPanel implements ChangeListener {
 	 */
 	private void displayEvents(LocalDate date)
 	{
-		//change the number of the panes according to the currently selected month
-		Arrays.fill(textPanes, null);
-		initializePanes();
-		
 		//To keep track of events on that day
 		ArrayList<Event> events = new ArrayList<>();
 

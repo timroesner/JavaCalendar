@@ -48,7 +48,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		usaHolidays = new ArrayList<>();
 		canadaHolidays = new ArrayList<>();
 		recurringEvents = new ArrayList<>();
-
+		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		monthView.setLayout(new BoxLayout(monthView, BoxLayout.Y_AXIS));
 		monthView.setSize(400, 600);
@@ -198,44 +198,36 @@ public class ControllView extends JPanel implements ChangeListener {
 		fromFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame fromFileFrame = new JFrame();
-				//create a file chooser that starts from the current directory
 				JFileChooser fc = new JFileChooser(currentDirectory);
-				//in response to a button click:
+				//In response to a button click:
 				int returnVal = fc.showOpenDialog(fromFileFrame);
-				
-				//when user clicks open
+
 				if (returnVal == JFileChooser.APPROVE_OPTION) 
 				{
 					File selectedFile = fc.getSelectedFile();
 					//if the selected file is not "input.txt"
 					if (!selectedFile.getName().equals("input.txt"))
-						JOptionPane.showMessageDialog(null, "This file does not contain recurring events."
-								+ " Please select 'input.txt'." ,
+						JOptionPane.showMessageDialog(null, "This file does not contain recurring events" ,
 								"Invalid file", JOptionPane.ERROR_MESSAGE);
 					//else, if the selected file is valid
 					else 
 					{
-						//checks if the file hasn't been loaded already
 						if (recurringEvents.isEmpty())
+
+						 = generalEvent.loadRecurringEvents();
+						//iterating over entire ArrayList instead of using the addAll() method
+						//because the views are only notified when the Calendar.add() method is invoked
+						for (Event event : recurringEvents)
 						{
-							recurringEvents = generalEvent.loadRecurringEvents();
-							//iterating over entire ArrayList instead of using the addAll() method
-							//because the views are only notified when the Calendar.add() method is invoked
-							for (Event event : recurringEvents)
-							{
-								Calendar.events.add(event);
-							}
-							//update views
-							monthViewPanel.stateChanged(new ChangeEvent(this));
-							dayView.update(month);
-							weekViewPanel.update(month);
+							Calendar.events.add(event);
 						}
-						//if it has been loaded, display a warning message
-						else
-							JOptionPane.showMessageDialog(null, "This file has been already loaded!",
-									"Warning", JOptionPane.ERROR_MESSAGE);
-					} // end else
+						//update views
+						monthViewPanel.stateChanged(new ChangeEvent(this));
+						dayView.update(month);
+						weekViewPanel.update(month);
+					}
 				}
+
 			}
 		});
 

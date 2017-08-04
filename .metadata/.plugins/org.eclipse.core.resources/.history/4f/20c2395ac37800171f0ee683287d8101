@@ -198,12 +198,10 @@ public class ControllView extends JPanel implements ChangeListener {
 		fromFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame fromFileFrame = new JFrame();
-				//create a file chooser that starts from the current directory
 				JFileChooser fc = new JFileChooser(currentDirectory);
-				//in response to a button click:
+				//In response to a button click:
 				int returnVal = fc.showOpenDialog(fromFileFrame);
-				
-				//when user clicks open
+
 				if (returnVal == JFileChooser.APPROVE_OPTION) 
 				{
 					File selectedFile = fc.getSelectedFile();
@@ -230,7 +228,6 @@ public class ControllView extends JPanel implements ChangeListener {
 							dayView.update(month);
 							weekViewPanel.update(month);
 						}
-						//if it has been loaded, display a warning message
 						else
 							JOptionPane.showMessageDialog(null, "This file has been already loaded!",
 									"Warning", JOptionPane.ERROR_MESSAGE);
