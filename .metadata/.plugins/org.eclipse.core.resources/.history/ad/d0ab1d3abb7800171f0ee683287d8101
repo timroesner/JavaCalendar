@@ -60,4 +60,17 @@ public class USAHolidayReader implements HolidayReader {
 		
 		return result;
 	}
+	
+	public static void main(String[] args)
+	{
+		USAHolidayReader usReader = new USAHolidayReader();
+		try {
+			ArrayList<Event> holidays = usReader.readHolidays();
+			for (Event h : holidays)
+				System.out.println(h.holidayToString());
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
 }

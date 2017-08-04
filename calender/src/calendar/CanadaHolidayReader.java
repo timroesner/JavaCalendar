@@ -60,17 +60,4 @@ public class CanadaHolidayReader implements HolidayReader {
 
 		return result;
 	}
-
-	public static void main(String[] args)
-	{
-		CanadaHolidayReader canadaHolidays = new CanadaHolidayReader();
-		try {
-			ArrayList<Event> holidays = canadaHolidays.readHolidays();
-			for (Event h : holidays)
-				System.out.println(h.holidayToString());
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
 }

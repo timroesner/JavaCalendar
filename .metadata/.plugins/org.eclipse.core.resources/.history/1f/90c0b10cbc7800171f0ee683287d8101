@@ -360,10 +360,7 @@ public class ControllView extends JPanel implements ChangeListener {
 						//check if the ArrayList canadaHolidays has events
 						//if so, remove all the Canadian holidays from calendar
 						if (!canadaHolidays.isEmpty())
-						{
 							Calendar.events.removeAll(canadaHolidays);
-							canadaHolidays.clear();
-						}
 
 						//add holidays to calendar
 						//iterate over entire ArrayList instead of using the addAll() method
@@ -400,10 +397,7 @@ public class ControllView extends JPanel implements ChangeListener {
 						//check if the ArrayList usaHolidays has events
 						//if so, remove all the American holidays from calendar
 						if (!usaHolidays.isEmpty())
-						{
 							Calendar.events.removeAll(usaHolidays);
-							usaHolidays.clear();
-						}
 
 						//iterate over entire ArrayList instead of using the addAll() method
 						//because the views are only notified when the Calendar.add() method is invoked

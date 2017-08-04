@@ -152,4 +152,51 @@ public class RecurringEventReader {
 				LocalTime.parse(endingTime));		
 	}
 
+//	public static void main(String[] args)
+//	{
+//		System.out.println("Starting");
+//		File f = new File("./input.txt");
+//		ArrayList<Event> result = new ArrayList<>();
+//		
+//		System.out.println("Checking if file exists");
+//		if (!(f.exists()))
+//		{
+//			System.out.println("File 'input.txt' does not exist");
+//			return;
+//		}
+//
+//		try {
+//			//build chain of readers
+//			System.out.println("Building chain of readers");
+//			FileReader fr = new FileReader(f);
+//			BufferedReader br = new BufferedReader(fr);
+//			RecurringEventReader er = new RecurringEventReader(br);
+//
+//			//create new ArrayList of events
+//			ArrayList<Event> recurringEvents = new ArrayList<>();
+//			//read ArrayList of recurring events and check if it's null
+//			System.out.println("Starting to read events");
+//			while ((recurringEvents = er.readEvent()) != null)	
+//			{
+//				System.out.println("Adding to result ArrayList");
+//				//add all instances of the recurring event to result
+//				result.addAll(recurringEvents);
+//			}
+//			//close chain of readers
+//			System.out.println("Closing chain of readers");
+//			br.close();
+//			fr.close();
+//
+//		} catch (IOException e) {
+//			System.out.println(e.getMessage());
+//		}
+//		System.out.println("Printing result");
+//		for (Event e : result)
+//		{
+//			System.out.println(e.toString());
+//		}
+//		
+//
+//	}
+
 }

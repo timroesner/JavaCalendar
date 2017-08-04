@@ -9,6 +9,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/*
+ * 1) when clicking "from file", should a dialogue be shown (for selecting the specific file)
+ * 2) test the "Quit" button after clicking the "From File" button
+ * 3) keep track of today in the month view
+ * 4) change the color of today in the calendar months GUI 
+ * 5) add a label to the day view showing the current date: WeekDay MM/DD/YYYY
+ * 6) the calendar month arrows shouldn't change the currently selected views
+ */
+
 /**
  * 
  * @author sarahsaber
@@ -207,4 +216,52 @@ public class MonthView extends JPanel implements ChangeListener {
 	{
 		return textPanes;
 	}
+
+	//	public static void main(String[] args)
+	//	{
+	//		Calendar c = new Calendar(new ArrayList<Event>());
+	//		//Month m = new Month(c.today);
+	//		//s.setSelectedDate(LocalDate.now());
+	//		MonthView mv = new MonthView(c);
+	//		JFrame frame = new JFrame();
+	//		frame.setSize(800, 800);
+	//		frame.setLayout(new BorderLayout());
+	//
+	//		c.attach(mv);
+	//		//m.attach(mv);
+	//		//mv.drawView();
+	//		
+	//		LocalDate d1 = LocalDate.of(2017, 8, 26);
+	//		LocalDate d2 = LocalDate.of(2017, 8, 29);
+	//		LocalDate d3 = LocalDate.of(2017, 8, 30);
+	//		LocalDate d4 = LocalDate.of(2017, 8, 2);
+	//
+	//		LocalTime s1 = LocalTime.of(12, 00);
+	//		LocalTime f1 = LocalTime.of(13, 00);
+	//		LocalTime s2 = LocalTime.of(12, 00);
+	//		LocalTime f2 = LocalTime.of(13, 00);
+	//		LocalTime s3 = LocalTime.of(12, 00);
+	//		LocalTime f3 = LocalTime.of(13, 00);
+	//
+	//		Event e = new Event("Test Event", d1 , s1, f1);
+	//		Event e2 = new Event("Test Event", d2, s2, f2);
+	//		Event e3 = new Event("Test Event", d3, s3, f3);
+	//		Event e4 = new Event("Test Event", d4, s3, f3);
+	//
+	//		c.add(e);
+	//		c.add(e2);
+	//		c.add(e3);
+	//		c.add(e4);
+	////		for (Pane p : mv.getTextPanes())
+	////		{
+	////			System.out.println(p.getText());
+	////		}
+	//		//mv.drawView();
+	//		
+	//		frame.add(mv, BorderLayout.EAST);
+	//		frame.setVisible(true);
+	//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//		//frame.pack();
+	//	}
+
 }
