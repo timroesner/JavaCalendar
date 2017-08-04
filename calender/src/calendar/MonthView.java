@@ -1,15 +1,12 @@
 package calendar;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import java.awt.*;
 import java.text.DateFormatSymbols;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.List;
 
 /*
@@ -32,7 +29,6 @@ public class MonthView extends JPanel implements ChangeListener {
 	private Calendar calendar;
 	private Pane[] textPanes;
 	private LocalDate selectedDate;
-	private LocalDate today;
 	private JPanel gridPanel;
 
 	/**
@@ -44,7 +40,6 @@ public class MonthView extends JPanel implements ChangeListener {
 		calendar = c;
 		selectedDate = SimpleCalendar.month.getSelectedDate();
 		textPanes = new Pane[selectedDate.lengthOfMonth()];
-		today = LocalDate.now();
 		gridPanel = new JPanel();
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

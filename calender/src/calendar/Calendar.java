@@ -11,14 +11,15 @@ import javax.swing.event.*;
  */
 
 public class Calendar {
-	// instance variables
-	public static Scanner sc = new Scanner(System.in);
+	
 	public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	public static ArrayList<Event> events = new ArrayList<>(); // store events here while running
 	public static LocalDate today = LocalDate.now( SimpleCalendar.z );
 	private ArrayList<ChangeListener> listeners;
 
-	// Construct Model and Listeners
+	/**
+	 * @param e takes an ArrayList of events, can be empty
+	 */
 	public Calendar(ArrayList<Event> e){
 		events = e;
 		listeners = new ArrayList<ChangeListener>();

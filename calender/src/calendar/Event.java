@@ -240,6 +240,9 @@ public class Event implements Comparable<Event>{
 		Calendar.events = new ArrayList<Event>(new TreeSet<Event>(Calendar.events));
 	}
 
+	/**
+	 * @return true or false depending if Event conflicts with existing events in Calendar
+	 */
 	public boolean conflicts(){
 		Boolean result = false;
 		for (Event event : Calendar.events){

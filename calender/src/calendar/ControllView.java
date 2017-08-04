@@ -10,7 +10,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
+/**
+ * @author Tim Roesner
+ * @version 1.0
+ */
 
 public class ControllView extends JPanel implements ChangeListener {
 
@@ -28,6 +31,12 @@ public class ControllView extends JPanel implements ChangeListener {
 	private ArrayList<Event> canadaHolidays;
 	private int currentView = 1 ; 
 
+	
+	/**
+	 * @param month takes a month with a date
+	 * From here all Panels are composed or created
+	 * This class is the main view and controller of the project
+	 */
 	public ControllView(Month month) {
 
 		this.month = month;
@@ -69,8 +78,7 @@ public class ControllView extends JPanel implements ChangeListener {
 		navLine.add(rightArrow);
 		monthView.add(navLine);
 
-		String[] weekdays = month.weekdays(); // Localized weekdays in short
-		// format
+		String[] weekdays = month.weekdays(); // Localized weekdays in short format
 
 		for (int day = 1; day < 8; day++) {
 			JLabel weekday = new JLabel(weekdays[day]);
@@ -78,9 +86,7 @@ public class ControllView extends JPanel implements ChangeListener {
 			monthViewDays.add(weekday);
 		}
 
-		LocalDate[] currentMonth = month.getDateArray(); // Get all 42 days
-		// displayed in the
-		// view
+		LocalDate[] currentMonth = month.getDateArray(); // Get all 42 days that are displayed in the view
 		for (LocalDate date : currentMonth) {
 			JTextField label = new JTextField(String.valueOf(date.getDayOfMonth()));
 			label.setEditable(false);
@@ -121,6 +127,8 @@ public class ControllView extends JPanel implements ChangeListener {
 		JButton fromFile = new JButton("From File");
 		JButton holidaySelection = new JButton("Load holidays");
 		JButton quit = new JButton("Quit");
+		
+		// Action for left arrow button
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentView == 1)
@@ -131,6 +139,8 @@ public class ControllView extends JPanel implements ChangeListener {
 					month.changeDate(month.date.minusMonths(1));
 			}
 		});
+		
+		// Action for right arrow button
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentView == 1)
@@ -141,16 +151,22 @@ public class ControllView extends JPanel implements ChangeListener {
 					month.changeDate(month.date.plusMonths(1));
 			}
 		});
+		
+		// Action for create button, opens new frame: CreateView
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new CreateView(month);
 			}
 		});
+		
+		// Action for today button, sets date of month to today
 		today.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				month.changeDate(Calendar.today);
 			}
 		});
+		
+		// Action for Day button, changes view to Day view
 		dayPanelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
@@ -161,6 +177,8 @@ public class ControllView extends JPanel implements ChangeListener {
 				currentView = 1 ;
 			}
 		});
+		
+		// Action for Week button, changes view to Week view
 		weekPanelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				rightView.removeAll();
@@ -171,6 +189,8 @@ public class ControllView extends JPanel implements ChangeListener {
 				currentView = 2 ;
 			}
 		});
+		
+		// Action for From File button, loads recurring events from input.txt
 		fromFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Event> recurringEvents = generalEvent.loadRecurringEvents();
@@ -185,12 +205,16 @@ public class ControllView extends JPanel implements ChangeListener {
 				weekViewPanel.update(month);
 			}
 		});
+		
+		// Quit button, saves events and closes frame
 		quit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				generalEvent.saveEvents(Calendar.events);
 				System.exit(0);
 			}
 		});
+		
+		// Action for Month button, changes view to Month view
 		monthPanelBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -203,6 +227,8 @@ public class ControllView extends JPanel implements ChangeListener {
 				currentView = 3 ;
 			}
 		});
+		
+		// Action for Agenda button, changes view to Agenda view
 		agendaPanelBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -260,6 +286,8 @@ public class ControllView extends JPanel implements ChangeListener {
 				frame.setVisible(true);
 			}
 		});
+		
+		// Action for Holiday button, asks for US or Canada
 		holidaySelection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -267,6 +295,8 @@ public class ControllView extends JPanel implements ChangeListener {
 				promptInputBox();
 			}
 		});
+		
+		// Add all buttons to the nav Panel
 		navPanel.add(today);
 		navPanel.add(left);
 		navPanel.add(right);
@@ -278,8 +308,12 @@ public class ControllView extends JPanel implements ChangeListener {
 		navPanel.add(fromFile);
 		navPanel.add(holidaySelection);
 		navPanel.add(quit);
+		
+		// Add navPanel and dayView to right view
 		rightView.add(navPanel);
 		rightView.add(dayView);
+		
+		// Add rightView and monthView on the left to the ControllView
 		add(monthView);
 		add(rightView);
 	}
@@ -379,6 +413,10 @@ public class ControllView extends JPanel implements ChangeListener {
 	}
 	
 	
+	/**
+	 * @param index takes index of label
+	 * @return the date of a label in the array as LocalDate
+	 */
 	public LocalDate getDateOfLbl(int index) {
 		return dates.get(index);
 	}
@@ -391,7 +429,10 @@ public class ControllView extends JPanel implements ChangeListener {
 		this.holidayStrategy = readingStrategy;
 	}
 
-	// If stateChanged update panels
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
 	public void stateChanged(ChangeEvent e) {
 		dayView.update(month);
 		weekViewPanel.update(month);

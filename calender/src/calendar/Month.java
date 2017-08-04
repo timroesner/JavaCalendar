@@ -21,6 +21,10 @@ public class Month {
 	public LocalDate startDate;
     public LocalDate endDate;
 
+	/**
+	 * Constructor of Month object
+	 * @param date takes a LocalDate which the whole month is centered around
+	 */
 	public Month(LocalDate date) {
 		this.date = date;
 		this.startDate = date ;
@@ -30,9 +34,7 @@ public class Month {
 
 	/**
 	 * Attach a listener to the Model
-	 * 
-	 * @param c
-	 *            the listener
+	 * @param c the listener
 	 */
 	public void attach(ChangeListener c) {
 		listeners.add(c);
@@ -46,7 +48,10 @@ public class Month {
 		}
 	}
 
-	// Returns array with all 42 days to be displayed
+	
+	/**
+	 * @return an array of LocalDates, 42 to be exact which will be displayed in the Month view
+	 */
 	public LocalDate[] getDateArray() {
 		LocalDate firstOfMonth = this.date.withDayOfMonth(1);
 		LocalDate currentDay = firstOfMonth.minusDays(firstOfMonth.getDayOfWeek().getValue());
@@ -58,6 +63,11 @@ public class Month {
 		return result;
 	}
 
+	/**
+	 * @return an array of LocalDates 
+	 * Will always be the current week 
+	 * Weeks start on Sunday and end on Saturday
+	 */
 	public LocalDate[] getWeekArray() {
 		LocalDate currentDate = this.date;
 		LocalDate[] result = new LocalDate[7];
@@ -73,13 +83,21 @@ public class Month {
 		return result;
 	}
 
-	// Returns localized strings of weekdays
+	
+	/**
+	 * @return an array of Strings
+	 * Short form of the weekdays in the language defined in the SimpleCalender class
+	 */
 	public String[] weekdays() {
 		DateFormatSymbols symbols = new DateFormatSymbols(SimpleCalendar.language);
 		return symbols.getShortWeekdays();
 	}
 
-	// Returns localized string of month and year
+	
+	/**
+	 * @return a String of month name and year
+	 * Example: "July 2017"
+	 */
 	public String monthYearString() {
 		return this.date.getMonth().getDisplayName(TextStyle.FULL, SimpleCalendar.language) + " " + this.date.getYear();
 	}

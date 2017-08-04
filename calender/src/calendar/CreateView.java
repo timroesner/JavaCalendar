@@ -4,11 +4,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.*;
-
 import javax.swing.*;
 
+/**
+ * @author Tim
+ * @version 1.0
+ */
 public class CreateView extends JFrame {
 	
+	/**
+	 * @param month takes month from the ControllView to get current date and fill in TextField
+	 */
 	public CreateView(Month month) {
 		
         // Construct enclosing panel as Grid
@@ -56,7 +62,7 @@ public class CreateView extends JFrame {
 			}		
 		});
         
-        // Adust month to two chracters
+        // Adjust month to two characters
 		String monthString = "";
 		if(month.date.getMonthValue() < 10){
 			monthString = "0"+month.date.getMonthValue(); 

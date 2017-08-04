@@ -2,6 +2,11 @@ package calendar;
 
 import java.io.*;
 
+/**
+ * @author Tim
+ * @version 1.0
+ */
+
 public class EventWriter {
 
 	private PrintWriter printWriter;

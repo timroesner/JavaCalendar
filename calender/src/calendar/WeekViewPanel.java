@@ -1,30 +1,24 @@
 package calendar;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.TextStyle;
+import java.awt.*;
+import java.time.*;
+import java.time.format.*;
 import java.util.ArrayList;
+import javax.swing.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-
-import com.sun.org.apache.bcel.internal.generic.DASTORE;
-
-import sun.java2d.pipe.SpanShapeRenderer.Simple;
+/**
+ * @author Tim
+ * @version 1.0
+ */
 
 public class WeekViewPanel extends JPanel {
 
 	private JLabel[][] labels = new JLabel[7][24];
 	private ArrayList<Event> eventsOnDay = new ArrayList<>();
 
+	/**
+	 * Adds panels of all 7 days into one
+	 */
 	public WeekViewPanel() {
 
 		JPanel week = new JPanel(new FlowLayout());
@@ -36,6 +30,10 @@ public class WeekViewPanel extends JPanel {
 		add(scrollPane);
 	}
 
+	/**
+	 * @param date 
+	 * @return JPanel of the current day
+	 */
 	public JPanel create(LocalDate date) {
 
 		int weekday = date.getDayOfWeek().getValue() - 1;
@@ -102,7 +100,12 @@ public class WeekViewPanel extends JPanel {
 		return panel;
 	}
 
-	// Called when month or event model is updated
+	
+	/**
+	 * @param month takes month from ControllView
+	 * Is called when month.date is changed or 
+	 * when new Event is added
+	 */
 	public void update(Month month) {
 		for (LocalDate date : month.getWeekArray()) {
 			eventsOnDay.clear();

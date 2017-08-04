@@ -13,6 +13,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+/**
+ * @author Tim
+ * @version 1.0
+ */
+
 public class DayViewPanel extends JPanel {
 
 	private JLabel[] labels = new JLabel[24];
@@ -63,7 +68,7 @@ public class DayViewPanel extends JPanel {
 				}
 			}
 
-			// Add labels with preffered size
+			// Add labels with preferred size
 			c.gridx = 0;
 			c.gridy = hour;
 			c.gridwidth = 1;
@@ -82,7 +87,11 @@ public class DayViewPanel extends JPanel {
 		add(scrollPane);
 	}
 
-	// Called when month or event model is updated
+	
+	/**
+	 * @param month takes month from controllView to update the view if month.date has changed
+	 * Also called when a new event is added
+	 */
 	public void update(Month month) {
 		eventsOnDay.clear();
 
