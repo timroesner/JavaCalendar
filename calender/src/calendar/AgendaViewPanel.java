@@ -2,10 +2,14 @@ package calendar;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+/**
+ * @author Ying Wang
+ * @version 1.0
+ */
 
 public class AgendaViewPanel extends JPanel {
 
@@ -13,7 +17,6 @@ public class AgendaViewPanel extends JPanel {
 	private static ArrayList<Event> eventsOnAgenda = new ArrayList<>();
 	String agenda ;
 	JTextArea agendaDetail;
-	private Calendar calendar;
 
 	public AgendaViewPanel() {
 
@@ -41,7 +44,7 @@ public class AgendaViewPanel extends JPanel {
 		Event.sort();
 		eventsOnAgenda.clear() ;
 		// save updated events to eventsOnAgenda
-		for (Event event : calendar.events) {
+		for (Event event : Calendar.events) {
 			if (event.date.equals(month.startDate) || event.date.equals(month.endDate))
 				eventsOnAgenda.add(event);
 			if (event.date.isAfter(month.startDate) && event.date.isBefore(month.endDate))
