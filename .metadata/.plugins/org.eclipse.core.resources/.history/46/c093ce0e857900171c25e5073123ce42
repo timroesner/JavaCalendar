@@ -113,8 +113,8 @@ public class MonthView extends JPanel implements ChangeListener {
 			pane.updateUI();
 			//keep track of 'today' in the month view
 			LocalDate today = LocalDate.now();
-			LocalDate dummy = LocalDate.of(selectedDate.getYear(), selectedDate.getMonth().getValue(), Integer.parseInt(pane.getDayValueText().trim()));
-			if (dummy.equals(today))
+			LocalDate dummy = LocalDate.of(today.getYear(), today.getMonth().getValue(), Integer.parseInt(pane.getDayValueText().trim()));
+			if (dummy.equals(selectedDate))
 				pane.getDayValue().setForeground(Color.blue);
 			else
 				pane.getDayValue().setForeground(Color.black);
