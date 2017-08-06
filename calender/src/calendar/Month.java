@@ -10,12 +10,15 @@ import javax.swing.event.ChangeListener;
 import java.text.DateFormatSymbols;
 
 /**
+ * Responsible for keeping track of the currently selected date and notifying the views.
+ * Serves as part of the model of the project.
  * @author Tim Roesner
  * @version 1.0
  */
 
 public class Month {
 
+	//instance variables
 	public LocalDate date;
 	private ArrayList<ChangeListener> listeners;
 	public LocalDate startDate;
@@ -33,14 +36,17 @@ public class Month {
 	}
 
 	/**
-	 * Attach a listener to the Model
+	 * Attaches a listener to the Model
 	 * @param c the listener
 	 */
 	public void attach(ChangeListener c) {
 		listeners.add(c);
 	}
 
-	// Changes current date and notifies listeners
+	/**
+	 * Changes the current date and notifies listeners.
+	 * @param date the new date
+	 */
 	public void changeDate(LocalDate date) {
 		this.date = date;
 		for (ChangeListener l : listeners) {
@@ -50,7 +56,8 @@ public class Month {
 
 	
 	/**
-	 * @return an array of LocalDates, 42 to be exact which will be displayed in the Month view
+	 * Returns an array of LocalDates, 42 to be exact which will be displayed in the Month view.
+	 * @return the array of LocalDates 
 	 */
 	public LocalDate[] getDateArray() {
 		LocalDate firstOfMonth = this.date.withDayOfMonth(1);
@@ -64,9 +71,10 @@ public class Month {
 	}
 
 	/**
-	 * @return an array of LocalDates 
 	 * Will always be the current week 
 	 * Weeks start on Sunday and end on Saturday
+	 * @return an array of LocalDates 
+	 * 
 	 */
 	public LocalDate[] getWeekArray() {
 		LocalDate currentDate = this.date;
@@ -85,8 +93,8 @@ public class Month {
 
 	
 	/**
-	 * @return an array of Strings
 	 * Short form of the weekdays in the language defined in the SimpleCalender class
+	 * @return an array of Strings
 	 */
 	public String[] weekdays() {
 		DateFormatSymbols symbols = new DateFormatSymbols(SimpleCalendar.language);
@@ -95,8 +103,9 @@ public class Month {
 
 	
 	/**
-	 * @return a String of month name and year
+	 * Returns a string representation of the month name and year
 	 * Example: "July 2017"
+	 * @return a String of month name and year
 	 */
 	public String monthYearString() {
 		return this.date.getMonth().getDisplayName(TextStyle.FULL, SimpleCalendar.language) + " " + this.date.getYear();

@@ -5,13 +5,14 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
+ * A Frame which displays a message and has an "OK" button to close.
  * @author Tim Roesner
  * @version 1.0
  */
 public class AlertView extends JFrame{
 	
 	/**
-	 * A Frame which displays a message and has an "OK" button to close
+	 * Constructs an AlertView object.
 	 */
 	public AlertView() {
 		JPanel panel = new JPanel();

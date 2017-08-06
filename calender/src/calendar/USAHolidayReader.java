@@ -8,10 +8,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * 
- * @author sarahsaber
  * A concrete strategy class that implements the HolidayReader interface.
  * This class reads all USA Holidays in 2017 from a text file.
+ * @author sarahsaber
  */
 public class USAHolidayReader implements HolidayReader {
 

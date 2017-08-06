@@ -7,12 +7,14 @@ import java.time.*;
 import javax.swing.*;
 
 /**
+ * A JFrame responsible for prompting the user to enter the event information.
  * @author Tim
  * @version 1.0
  */
 public class CreateView extends JFrame {
 	
 	/**
+	 * Constructs a CreateView object.
 	 * @param month takes month from the ControllView to get current date and fill in TextField
 	 */
 	public CreateView(Month month) {

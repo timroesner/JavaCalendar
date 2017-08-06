@@ -10,16 +10,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
- * 
+ * A RecurringEventReader reads all instances of a recurring event from a BufferedReader. 
  * @author sarahsaber
- * A RecurringEventReader reads all instances of a recurring event from a text file. 
  */
 
 public class RecurringEventReader {
 
 	//instance variables
 	private BufferedReader br;
-
 
 	/**
 	 * Constructs RecurringEventReader object.
@@ -113,7 +111,7 @@ public class RecurringEventReader {
 	}
 
 	/**
-	 * Reads event information from text file.
+	 * Reads event information from BufferedReader.
 	 * @return ArrayList of all the instances of the recurring Event
 	 * @throws IOException
 	 */

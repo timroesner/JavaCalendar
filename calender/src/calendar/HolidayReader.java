@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 /**
  * 
- * @author sarahsaber
  * Strategy interface that will be implemented by concrete strategy classes.
- * Responsible for reading national holidays of different countries.  
+ * Responsible for reading national holidays of different countries. 
+ * @author sarahsaber 
  */
 public interface HolidayReader {
 	ArrayList<Event> readHolidays() throws IOException;

@@ -9,10 +9,9 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 /**
- * @author sarahsaber
  * A Pane is a JTextPane representing the individual days in the month. This class is 
  * used by the MonthView class which has an array of panes. 
- *
+ * @author sarahsaber
  */
 public class Pane extends JTextPane{
 	

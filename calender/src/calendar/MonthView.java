@@ -10,9 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 
+ * A JPanel that represents the Calendar Month View in GUI. 
  * @author sarahsaber
- *  A JPanel that represents the Calendar Month View in GUI. 
  */
 public class MonthView extends JPanel implements ChangeListener {
 

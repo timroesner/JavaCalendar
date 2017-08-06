@@ -14,15 +14,20 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 /**
+ * A JPanel that represents the Calendar Day View in GUI.
  * @author Tim
  * @version 1.0
  */
 
 public class DayViewPanel extends JPanel {
 
+	//instance variables
 	private JLabel[] labels = new JLabel[24];
 	private ArrayList<Event> eventsOnDay = new ArrayList<>();
 
+	/**
+	 * Constructs a DayViewPanel object.
+	 */
 	public DayViewPanel() {
 		
 		eventsOnDay.clear();
@@ -89,8 +94,10 @@ public class DayViewPanel extends JPanel {
 
 	
 	/**
+	 * This method is called to update the view whenever a new event is added or
+	 *  the selected date has changed.
 	 * @param month takes month from controllView to update the view if month.date has changed
-	 * Also called when a new event is added
+	 *
 	 */
 	public void update(Month month) {
 		eventsOnDay.clear();

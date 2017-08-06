@@ -1,4 +1,10 @@
 CS 151 Class;2017;6;8;MW;09;11;
 Volunteer;2017;7;9;A;10;13;
-Study;2017;6;8;MWTF;15;18;
-NetFlix;2017;1;12;MWTF;18;19;
+Study;2017;6;8;MWTH;15;17;
+NetFlix;2017;1;12;F;18;20;
+Workout;2017;1;4;STH;05;06;
+Trivia Night;2016;1;12;A;22;23;
+Movie Night;2016;5;8;H;19;21;
+Family Dinner;2016;1;12;F;19;22;
+Photography Class;2017;9;11;M;09;10;
+Tutoring;2017;2;5;TH;13;15;

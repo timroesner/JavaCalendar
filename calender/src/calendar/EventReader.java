@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.*;
 
 /**
+ * An EventReader reads events from a BufferedReader.
  * @author Tim Roesner
  * @version 1.0
  */

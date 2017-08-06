@@ -7,11 +7,13 @@ import java.util.TreeSet;
 
 
 /**
+ * Represents a calendar event either created by the user or loaded from a text file.  
  *  @author Tim Roesner
  *	@version 1.0
  */
 public class Event implements Comparable<Event>{
 
+	//instance variables
 	public String title;
 	public LocalDate date;
 	public LocalTime startTime;
@@ -180,7 +182,7 @@ public class Event implements Comparable<Event>{
 
 
 	/**
-	 * getTitle method 
+	 * Returns the title of the event.
 	 * @return title of Event as String
 	 */
 	public String getTitle(){
@@ -188,7 +190,7 @@ public class Event implements Comparable<Event>{
 	}
 
 	/**
-	 * getDate method
+	 * Returns the date of the event.
 	 * @return date of Event as String
 	 */
 	public String getDate(){
@@ -205,7 +207,7 @@ public class Event implements Comparable<Event>{
 	}
 
 	/**
-	 * getStartTime method
+	 * Returns the starting time of the event.
 	 * @return start time of Event as String
 	 */
 	public String getStartTime(){
@@ -213,7 +215,7 @@ public class Event implements Comparable<Event>{
 	}
 
 	/**
-	 * getEndTime method
+	 * Returns the ending time of the event.
 	 * @return end time of Event as String or "" if end time is null
 	 */
 	public String getEndTime(){
@@ -241,6 +243,7 @@ public class Event implements Comparable<Event>{
 	}
 
 	/**
+	 * Checks if the event conflicts with a pre-existing event in the calendar.
 	 * @return true or false depending if Event conflicts with existing events in Calendar
 	 */
 	public boolean conflicts(){

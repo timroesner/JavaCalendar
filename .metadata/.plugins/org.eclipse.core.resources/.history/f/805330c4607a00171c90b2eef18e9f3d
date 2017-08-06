@@ -1,0 +1,43 @@
+package calendar;
+
+import java.io.*;
+import java.time.*;
+
+/**
+ * An EventReader reads events from a text file.
+ * @author Tim Roesner
+ * @version 1.0
+ */
+
+public class EventReader {
+	
+	private BufferedReader br;
+	
+	/**
+	 * EventReader constructor
+	 * @param br takes a BufferedReader which is constructed from a FileReader
+	 */
+	public EventReader(BufferedReader br){
+		this.br = br;
+	}
+	
+	/**
+	 * readEvent method which reads event from BufferedReader 
+	 * @return Event which can then be processed 
+	 * @throws IOException if FileReader exception occurs
+	 */
+	public Event readEvent() throws IOException {
+		
+		String title = br.readLine();
+		if (title == null)
+			return null;
+		
+		LocalDate date = LocalDate.parse(br.readLine(), Calendar.formatter);
+		LocalTime startTime = LocalTime.parse(br.readLine());
+		String endString = br.readLine();
+		LocalTime endTime = null;
+		if(!(endString.equals("Optional"))){
+			endTime = LocalTime.parse(endString); }
+		return new Event(title, date, startTime, endTime);
+	}
+}

@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import javax.swing.*;
 
 /**
+ * A JPanel that represents the Calendar Week View in GUI.
  * @author Tim
  * @version 1.0
  */
 
 public class WeekViewPanel extends JPanel {
-
+	
+	//instance variables
 	private JLabel[][] labels = new JLabel[7][24];
 	private ArrayList<Event> eventsOnDay = new ArrayList<>();
 
@@ -31,7 +33,8 @@ public class WeekViewPanel extends JPanel {
 	}
 
 	/**
-	 * @param date 
+	 * Creates a panel representing the current day.
+	 * @param date the date
 	 * @return JPanel of the current day
 	 */
 	public JPanel create(LocalDate date) {
@@ -102,9 +105,9 @@ public class WeekViewPanel extends JPanel {
 
 	
 	/**
-	 * @param month takes month from ControllView
 	 * Is called when month.date is changed or 
 	 * when new Event is added
+	 * @param month takes month from ControllView
 	 */
 	public void update(Month month) {
 		for (LocalDate date : month.getWeekArray()) {

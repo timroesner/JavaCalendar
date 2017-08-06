@@ -6,18 +6,22 @@ import java.time.format.*;
 import javax.swing.event.*;
 
 /**
+ * A class that keeps track of all created events and the dates on which they are
+ * scheduled. It serves as the main model of the project.
  * @author Tim Roesner
  * @version 1.0
  */
 
 public class Calendar {
 	
+	//instance variables
 	public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 	public static ArrayList<Event> events = new ArrayList<>(); // store events here while running
 	public static LocalDate today = LocalDate.now( SimpleCalendar.z );
 	private ArrayList<ChangeListener> listeners;
 
 	/**
+	 * Constructs a Calendar object.
 	 * @param e takes an ArrayList of events, can be empty
 	 */
 	public Calendar(ArrayList<Event> e){
@@ -26,7 +30,7 @@ public class Calendar {
 	}
 
 	/**
-	 * Attach a listener to the Model
+	 * Attaches a listener to the Model
 	 * @param c the listener
 	 */
 	public void attach(ChangeListener c){

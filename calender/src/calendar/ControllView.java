@@ -12,12 +12,15 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
+ * This class is the main view and controller of the project. All panels
+ * are created or composed in this class.
  * @author Tim Roesner
  * @version 1.0
  */
 
 public class ControllView extends JPanel implements ChangeListener {
 
+	//instance variables
 	private JLabel monthYear = new JLabel();
 	public Month month;
 	private ArrayList<JTextField> labels = new ArrayList<>();
@@ -36,12 +39,12 @@ public class ControllView extends JPanel implements ChangeListener {
 
 
 	/**
+	 * Constructs a ControllView object.
 	 * @param month takes a month with a date
-	 * From here all Panels are composed or created
-	 * This class is the main view and controller of the project
 	 */
 	public ControllView(Month month) {
 
+		//initialize instance variables
 		this.month = month;
 		Calendar.events = generalEvent.loadEvents();
 		JPanel monthView = new JPanel(); // The complete Month Panel
@@ -53,11 +56,11 @@ public class ControllView extends JPanel implements ChangeListener {
 		monthView.setLayout(new BoxLayout(monthView, BoxLayout.Y_AXIS));
 		monthView.setSize(400, 600);
 		JPanel monthViewDays = new JPanel(); // Just the days and weekday labels
-		// layed out in a grid
+											 // layed out in a grid
 		monthViewDays.setLayout(new GridLayout(7, 7));
 
 
-		monthYear.setText(month.monthYearString());// "June 2017"
+		monthYear.setText(month.monthYearString()); // "June 2017"
 		JPanel navLine = new JPanel();
 		navLine.setLayout(new BoxLayout(navLine, BoxLayout.X_AXIS));
 		JTextField leftArrow = new JTextField("<");
@@ -67,23 +70,29 @@ public class ControllView extends JPanel implements ChangeListener {
 		leftArrow.setMaximumSize(new Dimension(22, 16));
 		rightArrow.setMaximumSize(new Dimension(22, 16));
 		Month seperateMonth = new Month(month.date);
+		
+		//left arrow navigates calendar to the previous month
 		leftArrow.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				seperateMonth.changeDate(seperateMonth.date.minusMonths(1));
 				updateMonth(seperateMonth);
 			}
 		});
+		
+		//right arrow navigates calendar to the next month
 		rightArrow.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				seperateMonth.changeDate(seperateMonth.date.plusMonths(1));
 				updateMonth(seperateMonth);
 			}
 		});
+		//add components to navLine
 		navLine.add(monthYear);
 		navLine.add(leftArrow);
 		navLine.add(rightArrow);
 		monthView.add(navLine);
 
+		//display calendar on the left
 		String[] weekdays = month.weekdays(); // Localized weekdays in short format
 
 		for (int day = 1; day < 8; day++) {
@@ -466,6 +475,8 @@ public class ControllView extends JPanel implements ChangeListener {
 
 
 	/**
+	 * Given an index of a JLabel in the labels array, this method 
+	 * returns the corresponding LocalDate object.
 	 * @param index takes index of label
 	 * @return the date of a label in the array as LocalDate
 	 */
@@ -481,6 +492,10 @@ public class ControllView extends JPanel implements ChangeListener {
 		this.holidayStrategy = readingStrategy;
 	}
 	
+	/**
+	 * Updates the calendar month to the given month.
+	 * @param m the new month
+	 */
 	public void updateMonth(Month m){
 		int j = 0;
 		monthYear.setText(m.monthYearString());

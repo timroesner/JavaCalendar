@@ -7,17 +7,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
+ * A JPanel that represents the Calendar Agenda View in GUI.
  * @author Ying Wang
  * @version 1.0
  */
 
 public class AgendaViewPanel extends JPanel {
 
-	
+	//instance variables
 	private static ArrayList<Event> eventsOnAgenda = new ArrayList<>();
 	String agenda ;
 	JTextArea agendaDetail;
 
+	/**
+	 * Constructs an AgendaViewPanel object.
+	 */
 	public AgendaViewPanel() {
 
 
@@ -36,8 +40,8 @@ public class AgendaViewPanel extends JPanel {
 	}
 	
 	/**
-	 * update the agendaView when new event is added
-	 * @param 
+	 * Updates the agendaView when a new event is added.
+	 * @param month takes a month with a starting and ending dates.
 	 */
 	public void update(Month month){
 		agenda = "Events between " + month.startDate.toString() + " and " + month.endDate.toString() + '\n';

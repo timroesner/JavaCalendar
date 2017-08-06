@@ -1,0 +1,524 @@
+package calendar;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.time.*;
+import java.util.ArrayList;
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+/**
+ * This class is the main view and controller of the project. All panels
+ * are created or composed in this class.
+ * @author Tim Roesner
+ * @version 1.0
+ */
+
+public class ControllView extends JPanel implements ChangeListener {
+
+	//instance variables
+	private JLabel monthYear = new JLabel();
+	public Month month;
+	private ArrayList<JTextField> labels = new ArrayList<>();
+	private ArrayList<LocalDate> dates = new ArrayList<>();
+	private Event generalEvent = new Event();
+	private DayViewPanel dayView = new DayViewPanel();
+	private WeekViewPanel weekViewPanel = new WeekViewPanel();
+	private MonthView monthViewPanel = new MonthView(SimpleCalendar.calendar);
+	private AgendaViewPanel agendaView = new AgendaViewPanel();
+	private HolidayReader holidayStrategy;
+	private ArrayList<Event> usaHolidays;
+	private ArrayList<Event> canadaHolidays;
+	ArrayList<Event> recurringEvents;
+	private int currentView = 1 ; 
+	File currentDirectory = new File(".");
+
+
+	/**
+	 * Constructs a ControllView object.
+	 * @param month takes a month with a date
+	 * 
+	 */
+	public ControllView(Month month) {
+
+		this.month = month;
+		Calendar.events = generalEvent.loadEvents();
+		JPanel monthView = new JPanel(); // The complete Month Panel
+		usaHolidays = new ArrayList<>();
+		canadaHolidays = new ArrayList<>();
+		recurringEvents = new ArrayList<>();
+
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		monthView.setLayout(new BoxLayout(monthView, BoxLayout.Y_AXIS));
+		monthView.setSize(400, 600);
+		JPanel monthViewDays = new JPanel(); // Just the days and weekday labels
+		// layed out in a grid
+		monthViewDays.setLayout(new GridLayout(7, 7));
+
+
+		monthYear.setText(month.monthYearString());// "June 2017"
+		JPanel navLine = new JPanel();
+		navLine.setLayout(new BoxLayout(navLine, BoxLayout.X_AXIS));
+		JTextField leftArrow = new JTextField("<");
+		JTextField rightArrow = new JTextField(">");
+		leftArrow.setEditable(false);
+		rightArrow.setEditable(false);
+		leftArrow.setMaximumSize(new Dimension(22, 16));
+		rightArrow.setMaximumSize(new Dimension(22, 16));
+		Month seperateMonth = new Month(month.date);
+		leftArrow.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				seperateMonth.changeDate(seperateMonth.date.minusMonths(1));
+				updateMonth(seperateMonth);
+			}
+		});
+		rightArrow.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				seperateMonth.changeDate(seperateMonth.date.plusMonths(1));
+				updateMonth(seperateMonth);
+			}
+		});
+		navLine.add(monthYear);
+		navLine.add(leftArrow);
+		navLine.add(rightArrow);
+		monthView.add(navLine);
+
+		String[] weekdays = month.weekdays(); // Localized weekdays in short format
+
+		for (int day = 1; day < 8; day++) {
+			JLabel weekday = new JLabel(weekdays[day]);
+			weekday.setHorizontalAlignment(SwingConstants.CENTER);
+			monthViewDays.add(weekday);
+		}
+
+		LocalDate[] currentMonth = month.getDateArray(); // Get all 42 days that are displayed in the view
+		for (LocalDate date : currentMonth) {
+			JTextField label = new JTextField(String.valueOf(date.getDayOfMonth()));
+			label.setEditable(false);
+			label.setHorizontalAlignment(JTextField.CENTER);
+
+			// If date is today or the selected color it grey
+			if (date.equals(Calendar.today) || date.equals(month.date)) {
+				label.setBackground(Color.gray);
+			} else {
+				label.setBackground(Color.white);
+			}
+			labels.add(label);
+			dates.add(date);
+
+			// Add MouseListener
+			label.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+					month.changeDate(getDateOfLbl(labels.indexOf(label)));
+				}
+			});
+			monthViewDays.add(label);
+		}
+
+		monthView.add(monthViewDays);
+
+		// Right view with NavPanel and DayViewPanel
+		JPanel rightView = new JPanel();
+		rightView.setLayout(new BoxLayout(rightView, BoxLayout.Y_AXIS));
+		JPanel navPanel = new JPanel();
+		JButton left = new JButton("<");
+		JButton right = new JButton(">");
+		JButton create = new JButton("Create");
+		JButton today = new JButton("Today");
+		JButton dayPanelBtn = new JButton("Day");
+		JButton weekPanelBtn = new JButton("Week");
+		JButton monthPanelBtn = new JButton("Month");
+		JButton agendaPanelBtn = new JButton("Agenda");
+		JButton fromFile = new JButton("From File");
+		JButton holidaySelection = new JButton("Load holidays");
+		JButton quit = new JButton("Quit");
+
+		// Action for left arrow button
+		left.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (currentView == 1)
+					month.changeDate(month.date.minusDays(1));
+				else if (currentView ==2)
+					month.changeDate(month.date.minusWeeks(1));
+				else 
+					month.changeDate(month.date.minusMonths(1));
+			}
+		});
+
+		// Action for right arrow button
+		right.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (currentView == 1)
+					month.changeDate(month.date.plusDays(1));
+				else if (currentView ==2)
+					month.changeDate(month.date.plusWeeks(1));
+				else 
+					month.changeDate(month.date.plusMonths(1));
+			}
+		});
+
+		// Action for create button, opens new frame: CreateView
+		create.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new CreateView(month);
+			}
+		});
+
+		// Action for today button, sets date of month to today
+		today.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				month.changeDate(Calendar.today);
+			}
+		});
+
+		// Action for Day button, changes view to Day view
+		dayPanelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rightView.removeAll();
+				rightView.add(navPanel);
+				rightView.add(dayView);
+				rightView.revalidate();
+				rightView.repaint();
+				currentView = 1 ;
+			}
+		});
+
+		// Action for Week button, changes view to Week view
+		weekPanelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rightView.removeAll();
+				rightView.add(navPanel);
+				rightView.add(weekViewPanel);
+				rightView.revalidate();
+				rightView.repaint();
+				currentView = 2 ;
+			}
+		});
+
+		// Action for From File button, loads recurring events from input.txt
+		fromFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame fromFileFrame = new JFrame();
+				//create a file chooser that starts from the current directory
+				JFileChooser fc = new JFileChooser(currentDirectory);
+				//in response to a button click:
+				int returnVal = fc.showOpenDialog(fromFileFrame);
+				
+				//when user clicks open
+				if (returnVal == JFileChooser.APPROVE_OPTION) 
+				{
+					File selectedFile = fc.getSelectedFile();
+					//if the selected file is not "input.txt"
+					if (!selectedFile.getName().equals("input.txt"))
+						JOptionPane.showMessageDialog(null, "This file does not contain recurring events."
+								+ " Please select 'input.txt'." ,
+								"Invalid file", JOptionPane.ERROR_MESSAGE);
+					//else, if the selected file is valid
+					else 
+					{
+						//checks if the file hasn't been loaded already
+						if (recurringEvents.isEmpty())
+						{
+							recurringEvents = generalEvent.loadRecurringEvents();
+							//iterating over entire ArrayList instead of using the addAll() method
+							//because the views are only notified when the Calendar.add() method is invoked
+							for (Event event : recurringEvents)
+							{
+								Calendar.events.add(event);
+							}
+							//update views
+							monthViewPanel.stateChanged(new ChangeEvent(this));
+							dayView.update(month);
+							weekViewPanel.update(month);
+						}
+						//if it has been loaded, display a warning message
+						else
+							JOptionPane.showMessageDialog(null, "This file has been already loaded!",
+									"Warning", JOptionPane.ERROR_MESSAGE);
+					} // end else
+				}
+			}
+		});
+
+		// Quit button, saves events and closes frame
+		quit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				generalEvent.saveEvents(Calendar.events);
+				System.exit(0);
+			}
+		});
+
+		// Action for Month button, changes view to Month view
+		monthPanelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				rightView.removeAll();
+				rightView.add(navPanel);
+				rightView.add(monthViewPanel);
+				monthViewPanel.stateChanged(new ChangeEvent(this));
+				rightView.revalidate();
+				rightView.repaint();
+				currentView = 3 ;
+			}
+		});
+
+		// Action for Agenda button, changes view to Agenda view
+		agendaPanelBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// pop out a new window for use to select dates
+				final JFrame frame = new JFrame();
+				JPanel panel = new JPanel();
+				panel.setLayout(new FlowLayout());
+				// add buttons and textFiled to the pop out window 
+				JLabel start = new JLabel("Start Date:");
+				final JTextField startTxt = new JTextField("08/01/2017");
+				JLabel end = new JLabel("End Date:");
+				final JTextField endTxt = new JTextField("08/01/2017");
+				JButton cancel = new JButton("Cancel");
+				JButton ok = new JButton("OK");
+				//add actionListener to cancel button
+				cancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						frame.dispose();
+
+					}
+				});
+
+				//add actionListener to OK button
+				ok.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						try { // update the month.startDate and month.endDate
+							SimpleCalendar.month.startDate = LocalDate.parse(startTxt.getText(), Calendar.formatter);
+							SimpleCalendar.month.endDate = LocalDate.parse(endTxt.getText(), Calendar.formatter);
+							// create new AgendaView
+
+							agendaView.update(month);
+							rightView.removeAll();
+							rightView.add(navPanel);
+							rightView.add(agendaView);
+							rightView.revalidate();
+							rightView.repaint();
+							frame.dispose();
+						} catch (Exception e2) {
+							System.out.println("error");
+						};
+					}
+				});
+
+				panel.add(start);
+				panel.add(startTxt);
+				panel.add(end);
+				panel.add(endTxt);
+				panel.add(ok);
+				panel.add(cancel);
+
+				frame.add(panel);
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				frame.pack();
+				frame.setVisible(true);
+			}
+		});
+
+		// Action for Holiday button, asks for US or Canada
+		holidaySelection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				//show dialogue 
+				promptInputBox();
+			}
+		});
+
+		// Add all buttons to the nav Panel
+		navPanel.add(today);
+		navPanel.add(left);
+		navPanel.add(right);
+		navPanel.add(create);
+		navPanel.add(dayPanelBtn);
+		navPanel.add(weekPanelBtn);
+		navPanel.add(monthPanelBtn);
+		navPanel.add(agendaPanelBtn);
+		navPanel.add(fromFile);
+		navPanel.add(holidaySelection);
+		navPanel.add(quit);
+
+		// Add navPanel and dayView to right view
+		rightView.add(navPanel);
+		rightView.add(dayView);
+
+		// Add rightView and monthView on the left to the ControllView
+		add(monthView);
+		add(rightView);
+	}
+
+	/**
+	 * Displays new JFrame for the user to select the country of preference.
+	 * There are two options for the country: USA and Canada.
+	 */
+	public void promptInputBox()
+	{
+		//create new frame
+		JFrame dialogueFrame = new JFrame();
+		dialogueFrame.setLayout(new BorderLayout());
+		dialogueFrame.setSize(300, 100);
+		//panel containing country buttons
+		JPanel btnPanel = new JPanel();
+
+		//add label containing helping message
+		JLabel label = new JLabel("Select country to load its holidays");
+		label.setHorizontalAlignment(JLabel.CENTER);
+		//create two buttons for the countries
+		JButton usa = new JButton("USA");
+		JButton canada = new JButton("Canada");
+		//add buttons to the button panel
+		btnPanel.add(usa);
+		btnPanel.add(canada);
+		//add label and button panel to the frame
+		dialogueFrame.add(label, BorderLayout.NORTH);
+		dialogueFrame.add(btnPanel, BorderLayout.CENTER);
+
+		//attach an actionListener to the USA button
+		usa.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					//set strategy to read US holidays
+					setStrategy(new USAHolidayReader());
+
+					//if the holidays haven't been loaded before
+					if(usaHolidays.isEmpty())
+					{
+						//read holidays and store them into an ArrayList
+						usaHolidays = holidayStrategy.readHolidays();
+
+						//check if the ArrayList canadaHolidays has events
+						//if so, remove all the Canadian holidays from calendar
+						if (!canadaHolidays.isEmpty())
+						{
+							Calendar.events.removeAll(canadaHolidays);
+							canadaHolidays.clear();
+						}
+
+						//add holidays to calendar
+						//iterate over entire ArrayList instead of using the addAll() method
+						//because the views are only notified when the Calendar.add() method is invoked
+						for (Event event : usaHolidays)
+						{
+							Calendar.events.add(event);
+						}
+
+						//update views 
+						monthViewPanel.stateChanged(new ChangeEvent(this));
+						dayView.update(month);
+						weekViewPanel.update(month);		
+					}
+					dialogueFrame.dispose();
+				} catch (IOException e1) {
+					System.out.println(e1.getMessage());
+				}
+			}
+		});
+		//attach an actionListener to the Canada button
+		canada.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				try {
+					//set strategy to read Canada's holidays
+					setStrategy(new CanadaHolidayReader());
+
+					//if the holidays haven't been loaded before
+					if (canadaHolidays.isEmpty())
+					{
+						//read holidays and store them into an ArrayList
+						canadaHolidays = holidayStrategy.readHolidays();
+
+						//check if the ArrayList usaHolidays has events
+						//if so, remove all the American holidays from calendar
+						if (!usaHolidays.isEmpty())
+						{
+							Calendar.events.removeAll(usaHolidays);
+							usaHolidays.clear();
+						}
+
+						//iterate over entire ArrayList instead of using the addAll() method
+						//because the views are only notified when the Calendar.add() method is invoked
+						for (Event event : canadaHolidays)
+						{
+							Calendar.events.add(event);
+						}
+
+						//update views
+						monthViewPanel.stateChanged(new ChangeEvent(this));
+						dayView.update(month);
+						weekViewPanel.update(month);
+					}
+
+					dialogueFrame.dispose();
+				} catch (IOException e1) {
+					System.out.println(e1.getMessage());
+				}
+			}
+		});
+
+		dialogueFrame.setVisible(true);
+		dialogueFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	}
+
+
+	/**
+	 * @param index takes index of label
+	 * @return the date of a label in the array as LocalDate
+	 */
+	public LocalDate getDateOfLbl(int index) {
+		return dates.get(index);
+	}
+
+	/**
+	 * Changes the holiday-reading strategy.
+	 * @param readingStrategy the new strategy
+	 */
+	public void setStrategy(HolidayReader readingStrategy) {
+		this.holidayStrategy = readingStrategy;
+	}
+	
+	public void updateMonth(Month m){
+		int j = 0;
+		monthYear.setText(m.monthYearString());
+		for (LocalDate newDate : m.getDateArray()) {
+			JTextField label = labels.get(j);
+			label.setText(String.valueOf(newDate.getDayOfMonth()));
+			label.setBackground(Color.white);
+			j++;
+		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
+	public void stateChanged(ChangeEvent e) {
+		dayView.update(month);
+		weekViewPanel.update(month);
+		monthViewPanel.stateChanged(new ChangeEvent(this));
+		agendaView.update(month);
+
+		int j = 0;
+		monthYear.setText(this.month.monthYearString());
+		dates.clear();
+		for (LocalDate newDate : this.month.getDateArray()) {
+			JTextField label = labels.get(j);
+			dates.add(newDate);
+			label.setText(String.valueOf(newDate.getDayOfMonth()));
+			if (this.month.date.equals(newDate) || Calendar.today.equals(newDate)) {
+				label.setBackground(Color.gray);
+			} else {
+				label.setBackground(Color.white);
+			}
+			j++;
+		}
+	}
+
+}

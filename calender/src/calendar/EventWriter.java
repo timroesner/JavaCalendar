@@ -3,6 +3,7 @@ package calendar;
 import java.io.*;
 
 /**
+ * An EventWriter which writes events to a printWriter.
  * @author Tim
  * @version 1.0
  */
@@ -20,7 +21,7 @@ public class EventWriter {
 	}
 	
 	/**
-	 * writeEvent method
+	 * writeEvent method which writes an event to a printWriter.
 	 * @param event takes Event to write
 	 * @throws IOException 
 	 */
